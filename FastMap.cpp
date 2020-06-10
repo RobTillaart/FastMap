@@ -1,11 +1,12 @@
 //
 //    FILE: FastMap.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.0
+// VERSION: 0.2.1
 // PURPOSE: class with fast map function - library for Arduino
 //     URL: https://github.com/RobTillaart/FastMap
 //
 // HISTORY:
+// 0.2.1  2020-06-10 fix library.json; rename license
 // 0.2.0  2020-03-21 #pragma once; readme.md; license.md
 //
 // 0.1.8  2017-07-27 revert double to float (issue 33)
