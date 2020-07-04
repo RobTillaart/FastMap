@@ -2,6 +2,7 @@
 
 # Datatypes (KEYWORD1)
 FastMap	KEYWORD1
+FastMapDouble	KEYWORD1
 
 # Methods and Functions (KEYWORD2)
 map	KEYWORD2
