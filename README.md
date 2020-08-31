@@ -3,43 +3,60 @@
 Fast mapping and constraining
 
 ## Description
-FastMap is an object that precalculates (internal) floats to make the mapping function a.k.a. map() much faster.
-The preformance is the result of precalculate float values so actual mapping only has one multiply and add.
-The implementation uses floats which might result in more memory usage and some loss of precision for mapping
-with larger values.
 
-Note the gain is only made when there are many calls to the same mapping.
-If one alternates between different mappings it is better to create multiple fastMap objects.
+FastMap is an object that precalculates (internal) floats to make a mapping function especially for floats.
+The Fastmap also provides a **back()** function to reverse the mapping. 
+This only works well with floats, so use with care.
 
-The **init()** function calculates all needed values for the fastMapping and the constrains.
-Note this function can be called again with new values when needed to do other mapping.
+An important difference with the traditional **map()** function is that both **init()** and **map()** 
+accepts floats as parameters, allowing mapping that would be hard to achieve with the normal **map()**
+function.
 
-- **init(in_min, in_max, out_min, out_max);** defines the linear mapping parameters.
+## Performance notes
 
+(based upon tests https://github.com/RobTillaart/FastMap/issues/4 )
+- On AVR (UNO and MEGA) no gain is made mapping integers with fastMap, 130% slower = substantial
+- On AVR the gain for float is limited, 10% faster
+- On ESP32 the gain for integers and float is both in the order of 25%
 
-Besides the **map(value)** FastMap also has a **back(value)** function to 'map in reverse'.
+To see the actual gain in your project on your hardware you should test and compare.
 
-FastMap supports three versions of constraining the map function, as constrain() and map() often used together. 
-- **constrainedMap(value);** will return a value between outMin .. outMax
-- **lowerConstrainedMap(value);** will return a value between outMin .. inf  (No upper limit)
-- **upperConstrainedMap(value);** will return a value between -inf .. outMax
+FastMap is faster when mapping floats as it uses less float operations than the standard map formula does.
+The perfomance results from precalculating values in the  **init()** function so actual mapping needs only 
+one multiply and add, where the standard **map()** function uses four adds, a multiplication and a division.
+The precalculation in **init()** should be taken in account and if every **map()** call needs an **init()**
+there will be no gain, on contrary.
 
-To change the constrain values call **init()** with new limits, or call the original constrain()
+The implementation uses floats (typical 32 bits) which might result in more memory usage and loss of precision 
+for mapping of larger values, especially 32 and 64 bit integers. This is caused by the limits of the mantissa 
+(~23 bits) of the standard 4 byte float.
 
-Note there are **no** constrain-versions for **back(value)**
+## Interface
+
+- **void init(in_min, in_max, out_min, out_max);** defines the linear mapping parameters.  
+The **init()** function calculates all needed values for the **map()**, the **back()** call and the **constrainXX()** functions.
+The **init()** function can be called again with new values when needed to do other mapping, 
+although it will give less overhead if you create an fastMap object per conversion needed.
+Note: **init()** does not check for a divide by zero (out_max == out_min) or (in_max == in_min)
+- **float map(float value)** maps the parameter.
+- **float back(float value)** does the inverse mapping
+
+FastMap supports three versions of constraining the map function, based upon the parameters of **init()**
+- **float constrainedMap(float value);** returns a value between outMin .. outMax
+- **float lowerConstrainedMap(float value);** returns a value between outMin .. inf  (No upper limit)
+- **float upperConstrainedMap(float value);** returns a value between -inf .. outMax
+
+To change the constrain values call **init()** with new limits, or call **constrain()**
+
+Note there are **NO** constrain-versions for **back(value)** function.
+
 
 ## FastMapDouble
 
 Version 3.0 adds **fastMapDouble** which has the same interface.
-This additional class is meant to support 8 bytes doubles in their 
-native accuracy and precision. 
+This class is meant to support 8 bytes doubles in their native accuracy and precision. 
 To display doubles one might need the **sci()** function of my **printHelpers** class.
 
 ## Usage
 
-When a sensor has to be read out frequently and one needs to map the 
-value to another value e.g. to display or as control signal, the normal map() 
-function is using more math operations than **FastMap.map()**
-
-
-
+See examples.
