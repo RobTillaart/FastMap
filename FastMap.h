@@ -54,6 +54,48 @@ private:
     double _backfactor, _backbase;
 };
 
+#define FMI_VER1 1 // VER1 = simple fix of rounding issue crossing below 0
+class FastMapInt
+{
+public:
+    FastMapInt();
 
+    void init(const int in_min_incl, const int in_max_excl, const int out_min_incl, const int out_max_excl);
+private:
+    int _in_min_incl, _in_max_excl, _out_min_incl, _out_max_excl;
+    int _d_in, _d_out;
+
+public:
+#if defined(FMI_VER1)
+    int inline map (const int val)  {
+      int inXS = val - _in_min_incl;
+      if(inXS >= 0) { return ( _out_min_incl + (inXS * _d_out32) / _d_in); }
+      return ( _out_min_incl + (inXS * _d_out32 - _d_in_less1) / _d_in);
+    }
+    int inline back (const int val) {
+      int outXS = val - _out_min_incl;
+      if(outXS >= 0) { return ( _in_min_incl + (outXS * _d_in32) / _d_out); }
+      return ( _in_min_incl + (outXS * _d_in32 - _d_out_less1 ) / _d_out);
+    }
+private:
+    int32_t _d_in32, _d_out32;
+    int _d_in_less1, _d_out_less1;
+#elif defined(FMI_VER2)
+    int inline map (const int val);
+    int inline back (const int val);
+private:
+    int32_t _d_in32, _d_out32;
+    int _d_in_less1, _d_out_less1;
+#endif
+public:
+    int constrainedMap(const int val);
+    int lowerConstrainedMap(const int val);
+    int upperConstrainedMap(const int val);
+};
+int MultiplyByFixedPointFraction(int factor, long fixedPointFraction, bool bDebug=false);
+// we need two fractions, depending on whether we're multiplying a +ve or -ve factor later
+void RatioToFixedPointFraction(int numerator, int denominator, long* fixedPointFraction_Pos, long* fixedPointFraction_Neg);
+// Caluclate Greatest Common Denominator
+long CalcGCD(long A, long B);
 
 // -- END OF FILE --
