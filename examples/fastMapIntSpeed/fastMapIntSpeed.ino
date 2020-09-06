@@ -2,8 +2,8 @@
 //    FILE: fastMapIntSpeed.ino
 //  AUTHOR: Bryan White (Brewmanz), based on Rob Tillaart code
 // VERSION: 0.1.0
-// PURPOSE: demo of FastMapInt class
-//    DATE: 2020-08-xx
+// PURPOSE: demo of speed of FastMapInt class
+//    DATE: 2020-08-06
 //     URL: https://github.com/RobTillaart/FastMap
 
 #include "FastMap.h"

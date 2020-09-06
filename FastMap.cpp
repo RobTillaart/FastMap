@@ -120,6 +120,22 @@ void FastMapInt::init(const int in_min_incl, const int in_max_excl, const int ou
   _d_out32 = _d_out = out_max_excl - out_min_incl;
   _d_out_less1 = _d_out - (_d_out > 0 ? 1 : -1);
 }
+#elif defined(FMI_VER2)
+void FastMapInt::init(const int in_min_incl, const int in_max_excl, const int out_min_incl, const int out_max_excl)
+{
+  _in_min_incl = in_min_incl;
+  _in_max_excl = in_max_excl;
+  _out_min_incl = out_min_incl;
+  _out_max_excl = out_max_excl;
+
+  _d_in32 = _d_in = in_max_excl - in_min_incl;
+  _d_in_less1 = _d_in - (_d_in > 0 ? 1 : -1);
+
+  _d_out32 = _d_out = out_max_excl - out_min_incl;
+  _d_out_less1 = _d_out - (_d_out > 0 ? 1 : -1);
+
+  RatioToFixedPointFraction(_d_out, _d_in, &_fixedPointFraction_Pos, &_fixedPointFraction_Neg);
+}
 #endif
 int FastMapInt::constrainedMap(int value)
 {

@@ -54,7 +54,18 @@ private:
     double _backfactor, _backbase;
 };
 
-#define FMI_VER1 1 // VER1 = simple fix of rounding issue crossing below 0
+//#define FMI_VER1 1 // VER1 = simple fix of rounding issue crossing below 0
+#define FMI_VER2 2 // VER2 = improve speed of map
+
+// fixedPointFraction is a 16.16 number
+int MultiplyByFixedPointFraction(int factor, long fixedPointFraction, bool bDebug=false);
+
+// we need two fractions, depending on whether we're multiplying a +ve or -ve factor later
+void RatioToFixedPointFraction(int numerator, int denominator, long* fixedPointFraction_Pos, long* fixedPointFraction_Neg);
+
+// Calculate Greatest Common Denominator
+long CalcGCD(long A, long B);
+
 class FastMapInt
 {
 public:
@@ -67,7 +78,7 @@ private:
 
 public:
 #if defined(FMI_VER1)
-    int inline map (const int val)  {
+    int inline map (const int val) {
       int inXS = val - _in_min_incl;
       if(inXS >= 0) { return ( _out_min_incl + (inXS * _d_out32) / _d_in); }
       return ( _out_min_incl + (inXS * _d_out32 - _d_in_less1) / _d_in);
@@ -81,21 +92,25 @@ private:
     int32_t _d_in32, _d_out32;
     int _d_in_less1, _d_out_less1;
 #elif defined(FMI_VER2)
-    int inline map (const int val);
-    int inline back (const int val);
+    int inline map (const int val) {
+      int inXS = val - _in_min_incl;
+      if(inXS >= 0) { return (_out_min_incl + MultiplyByFixedPointFraction(inXS, _fixedPointFraction_Pos)); }
+      return ( _out_min_incl + MultiplyByFixedPointFraction(inXS, _fixedPointFraction_Neg));
+    }
+    int inline back (const int val) {
+      int outXS = val - _out_min_incl;
+      if(outXS >= 0) { return ( _in_min_incl + (outXS * _d_in32) / _d_out); }
+      return ( _in_min_incl + (outXS * _d_in32 - _d_out_less1 ) / _d_out);
+    }
 private:
     int32_t _d_in32, _d_out32;
     int _d_in_less1, _d_out_less1;
+    long _fixedPointFraction_Pos, _fixedPointFraction_Neg;
 #endif
 public:
     int constrainedMap(const int val);
     int lowerConstrainedMap(const int val);
     int upperConstrainedMap(const int val);
 };
-int MultiplyByFixedPointFraction(int factor, long fixedPointFraction, bool bDebug=false);
-// we need two fractions, depending on whether we're multiplying a +ve or -ve factor later
-void RatioToFixedPointFraction(int numerator, int denominator, long* fixedPointFraction_Pos, long* fixedPointFraction_Neg);
-// Caluclate Greatest Common Denominator
-long CalcGCD(long A, long B);
 
 // -- END OF FILE --
