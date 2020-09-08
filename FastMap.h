@@ -56,6 +56,8 @@ private:
     double _backfactor, _backbase;
 };
 
+// fixedPointFraction is a 8.8 number
+int8_t Multiply8ByFixedPointFraction88(int8_t factor, int16_t fixedPointFraction);
 // fixedPointFraction is a 16.16 number
 int16_t Multiply16ByFixedPointFraction1616(int16_t factor, int32_t fixedPointFraction);
 // fixedPointFraction is a 32.32 number
@@ -64,6 +66,7 @@ int32_t Multiply32ByFixedPointFraction3232(int32_t factor, int64_t fixedPointFra
 int64_t Multiply64ByFixedPointFraction3232(int64_t factor, int64_t fixedPointFraction);
 
 // we need two fractions, depending on whether we're multiplying a +ve or -ve factor later
+void Ratio8ToFixedPointFraction88(int8_t numerator, int8_t denominator, int16_t* fixedPointFraction_Pos, int16_t* fixedPointFraction_Neg);
 void Ratio16ToFixedPointFraction1616(int16_t numerator, int16_t denominator, int32_t* fixedPointFraction_Pos, int32_t* fixedPointFraction_Neg);
 void Ratio32ToFixedPointFraction3232(int32_t numerator, int32_t denominator, int64_t* fixedPointFraction_Pos, int64_t* fixedPointFraction_Neg);
 // COMPROMISE until int128_t defined // Ratio64ToFixedPointFraction3232
@@ -78,64 +81,47 @@ public:
     FastMapInt();
 
     void init(const int in_min_incl, const int in_max_excl, const int out_min_incl, const int out_max_excl);
-    int inline map (const int val) {
+    int inline map (const int val, int* pCalcInfo = nullptr) {
+      int calcInfo = 0;
       int inXS = val - _in_min_incl;
-#if   defined(__INT_WIDTH__) && (__INT_WIDTH__ == 16)
-      if(inXS >= 0) { return (_out_min_incl + Multiply16ByFixedPointFraction1616(inXS, _fixedPointFraction_Pos) ); }
-      return ( _out_min_incl + Multiply16ByFixedPointFraction1616(inXS, _fixedPointFraction_Neg));
-#elif defined(__INT_WIDTH__) && (__INT_WIDTH__ == 32)
-      if(inXS >= 0) { return (_out_min_incl + Multiply32ByFixedPointFraction3232(inXS, _fixedPointFraction_Pos) ); }
-      return ( _out_min_incl + Multiply32ByFixedPointFraction3232(inXS, _fixedPointFraction_Neg));
-#elif defined(__INT_WIDTH__) && (__INT_WIDTH__ == 64)
-#pragma message("Dodgy news: compromise because int width is " STRING(__INT_WIDTH__) )
-      if(inXS >= 0) { return (_out_min_incl + Multiply64ByFixedPointFraction3232(inXS, _fixedPointFraction_Pos) ); }
-      return ( _out_min_incl + Multiply64ByFixedPointFraction3232(inXS, _fixedPointFraction_Neg));
-#elif defined(__INT_WIDTH__)
-#pragma message("Bad news: int width is " STRING(__INT_WIDTH__) )
-#error ("Oops: Code does not handle this int width"
-      return (-1);
-#else
-#error "Oops: Unable to determine int width"
-      return (-1);
-#endif
+      int absXS = abs(inXS);
+      int ratioPart;
+      if(absXS == 0){
+        calcInfo |= 1;
+        ratioPart = 0;
+      } else if(absXS < _d_FactorToMax8){
+        calcInfo |= 2;
+        ratioPart = Multiply8ByFixedPointFraction88(inXS, inXS >= 0 ? _fixedPoint88Fraction_Pos : _fixedPoint88Fraction_Neg);
+      } else if(absXS < _d_FactorToMax16){
+        calcInfo |= 4;
+        ratioPart = Multiply16ByFixedPointFraction1616(inXS, inXS >= 0 ? _fixedPoint1616Fraction_Pos : _fixedPoint1616Fraction_Neg);
+      } else if(absXS < _d_FactorToMax32){
+        calcInfo |= 8;
+        ratioPart = Multiply32ByFixedPointFraction3232(inXS, inXS >= 0 ? _fixedPoint3232Fraction_Pos : _fixedPoint3232Fraction_Neg);
+      } else {
+        calcInfo |= 32;
+        ratioPart = ((long)inXS * _d_out - (inXS >= 0 ? 0 : _d_in_less1)) / _d_in;
+      }
+//Serial.print("cI=");Serial.print(calcInfo, DEC);Serial.print(", rP=");Serial.println(ratioPart, DEC);
+
+      if(pCalcInfo) { *pCalcInfo = calcInfo; } // pass back calc info, if wanted
+      return ( _out_min_incl + ratioPart);
     }
     int inline back (const int val) {
       int outXS = val - _out_min_incl;
-      if(outXS >= 0) { return ( _in_min_incl + (outXS * _d_in_wider) / _d_out); }
-      return ( _in_min_incl + (outXS * _d_in_wider - _d_out_less1 ) / _d_out);
+      return ( _in_min_incl + ((long)outXS * _d_in - (outXS >= 0 ? 0 : _d_out_less1) ) / _d_out);
     }
     int constrainedMap(const int val);
     int lowerConstrainedMap(const int val);
     int upperConstrainedMap(const int val);
 private:
     int _in_min_incl, _in_max_excl, _out_min_incl, _out_max_excl;
-    int _d_in, _d_out;
+    int _d_in, _d_out, _d_GCF;
     int _d_in_less1, _d_out_less1;
-#if   defined(__INT_WIDTH__) && (__INT_WIDTH__ == 8)
-#pragma message("Good news: int width is " STRING(__INT_WIDTH__) )
-    int16_t _d_in_wider, _d_out_wider;
-    int16_t _fixedPointFraction_Pos, _fixedPointFraction_Neg;
-#elif   defined(__INT_WIDTH__) && (__INT_WIDTH__ == 16)
-#pragma message("Good news: int width is " STRING(__INT_WIDTH__) )
-    int32_t _d_in_wider, _d_out_wider;
-    int32_t _fixedPointFraction_Pos, _fixedPointFraction_Neg;
-#elif defined(__INT_WIDTH__) && (__INT_WIDTH__ == 32)
-#pragma message("Good news: int width is " STRING(__INT_WIDTH__))
-    int64_t  _d_in_wider, _d_out_wider;
-    int64_t _fixedPointFraction_Pos, _fixedPointFraction_Neg;
-#elif defined(__INT_WIDTH__) && (__INT_WIDTH__ == 64)
-#pragma message("Good news: int width is " STRING(__INT_WIDTH__))
-    int128_t  _d_in_wider, _d_out_wider;
-    int128_t _fixedPointFraction_Pos, _fixedPointFraction_Neg;
-#elif defined(__INT_WIDTH__)
-#warning("Unexpected news: unexpected int widths of " STRING(__INT_WIDTH__) ". I hope that 'long' is wider")
-    long _d_in_wider, _d_out_wider;
-    long _fixedPointFraction_Pos, _fixedPointFraction_Neg;
-#else
-#warning("Unexpected news: Cannot find int width. Let's hope that 'long' is wider")
-    long _d_in_wider, _d_out_wider;
-    long _fixedPointFraction_Pos, _fixedPointFraction_Neg;
-#endif
+    int _d_FactorToMax8, _d_FactorToMax16, _d_FactorToMax32; // used to see if we can reduce size of calculaton
+    int16_t _fixedPoint88Fraction_Pos, _fixedPoint88Fraction_Neg;
+    int32_t _fixedPoint1616Fraction_Pos, _fixedPoint1616Fraction_Neg;
+    int64_t _fixedPoint3232Fraction_Pos, _fixedPoint3232Fraction_Neg;
 };
 
 class FastMapLong
@@ -144,59 +130,46 @@ public:
     FastMapLong();
 
     void init(const long in_min_incl, const long in_max_excl, const long out_min_incl, const long out_max_excl);
-    long inline map (const long val) {
+    long inline map (const long val, int* pCalcInfo = nullptr) {
+      long calcInfo = 0;
       long inXS = val - _in_min_incl;
-#if   defined(__LONG_WIDTH__) && (__LONG_WIDTH__ == 16)
-      if(inXS >= 0) { return (_out_min_incl + Multiply16ByFixedPointFraction1616(inXS, _fixedPointFraction_Pos) ); }
-      return ( _out_min_incl + Multiply16ByFixedPointFraction1616(inXS, _fixedPointFraction_Neg));
-#elif defined(__LONG_WIDTH__) && (__LONG_WIDTH__ == 32)
-      if(inXS >= 0) { return (_out_min_incl + Multiply32ByFixedPointFraction3232(inXS, _fixedPointFraction_Pos) ); }
-      return ( _out_min_incl + Multiply32ByFixedPointFraction3232(inXS, _fixedPointFraction_Neg));
-#elif defined(__LONG_WIDTH__) && (__LONG_WIDTH__ == 64)
-#pragma message("Dodgy news: compromise because long width is " STRING(__LONG_WIDTH__) )
-      if(inXS >= 0) { return (_out_min_incl + Multiply64ByFixedPointFraction3232(inXS, _fixedPointFraction_Pos) ); }
-      return ( _out_min_incl + Multiply64ByFixedPointFraction3232(inXS, _fixedPointFraction_Neg));
-#elif defined(__LONG_WIDTH__)
-#pragma message("Bad news: long width is " STRING(__LONG_WIDTH__) )
-#error ("Oops: Code does not handle this long width"
-      return (-1);
-#else
-#error "Oops: Unable to determine long width"
-      return (-1);
-#endif
+      long absXS = abs(inXS);
+      long ratioPart;
+      if(absXS == 0){
+        calcInfo |= 1;
+        ratioPart = 0;
+      } else if(absXS < _d_FactorToMax8){
+        calcInfo |= 2;
+        ratioPart = Multiply8ByFixedPointFraction88(inXS, inXS >= 0 ? _fixedPoint88Fraction_Pos : _fixedPoint88Fraction_Neg);
+      } else if(absXS < _d_FactorToMax16){
+        calcInfo |= 4;
+        ratioPart = Multiply16ByFixedPointFraction1616(inXS, inXS >= 0 ? _fixedPoint1616Fraction_Pos : _fixedPoint1616Fraction_Neg);
+      } else if(absXS < _d_FactorToMax32){
+        calcInfo |= 8;
+        ratioPart = Multiply32ByFixedPointFraction3232(inXS, inXS >= 0 ? _fixedPoint3232Fraction_Pos : _fixedPoint3232Fraction_Neg);
+      } else {
+        calcInfo |= 32;
+        ratioPart = ((long long)inXS * _d_out - (inXS >= 0 ? 0 : _d_in_less1)) / _d_in;
+      }
+//Serial.print("cI=");Serial.print(calcInfo, DEC);Serial.print(", rP=");Serial.println(ratioPart, DEC);
+
+      if(pCalcInfo) { *pCalcInfo = calcInfo; } // pass back calc info, if wanted
+      return ( _out_min_incl + ratioPart);
     }
     long inline back (const long val) {
       long outXS = val - _out_min_incl;
-      if(outXS >= 0) { return ( _in_min_incl + (outXS * _d_in_wider) / _d_out); }
-      return ( _in_min_incl + (outXS * _d_in_wider - _d_out_less1 ) / _d_out);
+      return ( _in_min_incl + ((long long)outXS * _d_in - (outXS >= 0 ? 0 : _d_out_less1) ) / _d_out);
     }
     long constrainedMap(const long val);
     long lowerConstrainedMap(const long val);
     long upperConstrainedMap(const long val);
 private:
-    int _in_min_incl, _in_max_excl, _out_min_incl, _out_max_excl;
-    int _d_in, _d_out;
-    int _d_in_less1, _d_out_less1;
-#if   defined(__LONG_WIDTH__) && (__LONG_WIDTH__ == 16)
-#pragma message("Good news: long width is " STRING(__LONG_WIDTH__))
-    int32_t _d_in_wider, _d_out_wider;
-    int32_t _fixedPointFraction_Pos, _fixedPointFraction_Neg;
-#elif defined(__LONG_WIDTH__) && (__LONG_WIDTH__ == 32)
-#pragma message("Good news: long width is " STRING(__LONG_WIDTH__))
-    int64_t  _d_in_wider, _d_out_wider;
-    int64_t _fixedPointFraction_Pos, _fixedPointFraction_Neg;
-#elif defined(__LONG_WIDTH__) && (__LONG_WIDTH__ == 64)
-#pragma message("Dodgy news: compromise because long width is " STRING(__LONG_WIDTH__) )
-    int64_t  _d_in_wider, _d_out_wider;
-    int64_t _fixedPointFraction_Pos, _fixedPointFraction_Neg;
-#elif defined(__LONG_WIDTH__)
-#warning("Unexpected news: unexpected long widths of " STRING(__LONG_WIDTH__) ". I hope that 'long long' is wider")
-    long long _d_in_wider, _d_out_wider;
-    long long _fixedPointFraction_Pos, _fixedPointFraction_Neg;
-#else
-#warning("Unexpected news: Cannot find int width. Let's hope that 'long long' is wider")
-    long long _d_in_wider, _d_out_wider;
-    long long _fixedPointFraction_Pos, _fixedPointFraction_Neg;
-#endif
+    long _in_min_incl, _in_max_excl, _out_min_incl, _out_max_excl;
+    long _d_in, _d_out, _d_GCF;
+    long _d_in_less1, _d_out_less1;
+    long _d_FactorToMax8, _d_FactorToMax16, _d_FactorToMax32; // used to see if we can reduce size of calculaton
+    int16_t _fixedPoint88Fraction_Pos, _fixedPoint88Fraction_Neg;
+    int32_t _fixedPoint1616Fraction_Pos, _fixedPoint1616Fraction_Neg;
+    int64_t _fixedPoint3232Fraction_Pos, _fixedPoint3232Fraction_Neg;
 };
 // -- END OF FILE --

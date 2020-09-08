@@ -12,7 +12,7 @@
 
 volatile int i, j;
 
-test(T1136Multiply16ByFixedPointFraction1616_5DivM9_Neg) {
+test(T1186Multiply16ByFixedPointFraction1616_5DivM9_Neg) {
   int32_t FPF;
   Ratio16ToFixedPointFraction1616(5, -9, nullptr, &FPF);
   assertEqual(Multiply16ByFixedPointFraction1616(0, FPF), 0);
@@ -40,7 +40,7 @@ test(T1136Multiply16ByFixedPointFraction1616_5DivM9_Neg) {
   assertEqual(Multiply16ByFixedPointFraction1616(-8000, FPF), 4445);
   assertEqual(Multiply16ByFixedPointFraction1616(-9000, FPF), 5000);
 }
-test(T1135Multiply16ByFixedPointFraction1616_5DivM9_Pos) {
+test(T1185Multiply16ByFixedPointFraction1616_5DivM9_Pos) {
   int32_t FPF;
   Ratio16ToFixedPointFraction1616(5, -9, &FPF, nullptr);
   assertEqual(Multiply16ByFixedPointFraction1616(0, FPF), 0);
@@ -68,7 +68,7 @@ test(T1135Multiply16ByFixedPointFraction1616_5DivM9_Pos) {
   assertEqual(Multiply16ByFixedPointFraction1616(8000, FPF), -4444);
   assertEqual(Multiply16ByFixedPointFraction1616(9000, FPF), -5000);
 }
-test(T1131Multiply16ByFixedPointFraction1616_5Div9_Neg) {
+test(T1181Multiply16ByFixedPointFraction1616_5Div9_Neg) {
   int32_t FPF;
   Ratio16ToFixedPointFraction1616(5, 9, nullptr, &FPF);
   assertEqual(Multiply16ByFixedPointFraction1616(0, FPF), 0);
@@ -96,7 +96,7 @@ test(T1131Multiply16ByFixedPointFraction1616_5Div9_Neg) {
   assertEqual(Multiply16ByFixedPointFraction1616(-8000, FPF), -4445);
   assertEqual(Multiply16ByFixedPointFraction1616(-9000, FPF), -5000);
 }
-test(T1130Multiply16ByFixedPointFraction1616_5Div9_Pos) {
+test(T1180Multiply16ByFixedPointFraction1616_5Div9_Pos) {
   int32_t FPF;
   Ratio16ToFixedPointFraction1616(5, 9, &FPF, nullptr);
   assertEqual(Multiply16ByFixedPointFraction1616(0, FPF), 0);
@@ -125,7 +125,7 @@ test(T1130Multiply16ByFixedPointFraction1616_5Div9_Pos) {
   assertEqual(Multiply16ByFixedPointFraction1616(9000, FPF), 5000);
 }
 
-test(T1126Multiply16ByFixedPointFraction1616_1DivM3_Neg) {
+test(T1176Multiply16ByFixedPointFraction1616_1DivM3_Neg) {
   int32_t FPF;
   Ratio16ToFixedPointFraction1616(1, -3, nullptr, &FPF);
   assertEqual(Multiply16ByFixedPointFraction1616(0, FPF), 0);
@@ -153,7 +153,7 @@ test(T1126Multiply16ByFixedPointFraction1616_1DivM3_Neg) {
   assertEqual(Multiply16ByFixedPointFraction1616(-8000, FPF), 2667);
   assertEqual(Multiply16ByFixedPointFraction1616(-9000, FPF), 3000);
 }
-test(T1125Multiply16ByFixedPointFraction1616_1DivM3_Pos) {
+test(T1175Multiply16ByFixedPointFraction1616_1DivM3_Pos) {
   int32_t FPF;
   Ratio16ToFixedPointFraction1616(1, -3, &FPF, nullptr);
   assertEqual(Multiply16ByFixedPointFraction1616(0, FPF), 0);
@@ -181,7 +181,7 @@ test(T1125Multiply16ByFixedPointFraction1616_1DivM3_Pos) {
   assertEqual(Multiply16ByFixedPointFraction1616(8000, FPF), -2666);
   assertEqual(Multiply16ByFixedPointFraction1616(9000, FPF), -3000);
 }
-test(T1121Multiply16ByFixedPointFraction1616_1Div3_Neg) {
+test(T1171Multiply16ByFixedPointFraction1616_1Div3_Neg) {
   int32_t FPF;
   Ratio16ToFixedPointFraction1616(1, 3, nullptr, &FPF);
   assertEqual(Multiply16ByFixedPointFraction1616(0, FPF), 0);
@@ -209,7 +209,7 @@ test(T1121Multiply16ByFixedPointFraction1616_1Div3_Neg) {
   assertEqual(Multiply16ByFixedPointFraction1616(-8000, FPF), -2667);
   assertEqual(Multiply16ByFixedPointFraction1616(-9000, FPF), -3000);
 }
-test(T1120Multiply16ByFixedPointFraction1616_1Div3_Pos) {
+test(T1170Multiply16ByFixedPointFraction1616_1Div3_Pos) {
   int32_t FPF;
   Ratio16ToFixedPointFraction1616(1, 3, &FPF, nullptr);
   assertEqual(Multiply16ByFixedPointFraction1616(0, FPF), 0);
@@ -238,7 +238,7 @@ test(T1120Multiply16ByFixedPointFraction1616_1Div3_Pos) {
   assertEqual(Multiply16ByFixedPointFraction1616(9000, FPF), 3000);
 }
 
-test(T1116Multiply16ByFixedPointFraction1616_1DivM4_Neg) {
+test(T1166Multiply16ByFixedPointFraction1616_1DivM4_Neg) {
   int32_t FPF;
   Ratio16ToFixedPointFraction1616(1, -4, nullptr, &FPF);
   assertEqual(Multiply16ByFixedPointFraction1616(0, FPF), 0);
@@ -266,7 +266,7 @@ test(T1116Multiply16ByFixedPointFraction1616_1DivM4_Neg) {
   assertEqual(Multiply16ByFixedPointFraction1616(-8000, FPF), 2000);
   assertEqual(Multiply16ByFixedPointFraction1616(-9000, FPF), 2250);
 }
-test(T1115Multiply16ByFixedPointFraction1616_1DivM4_Pos) {
+test(T1165Multiply16ByFixedPointFraction1616_1DivM4_Pos) {
   int32_t FPF;
   Ratio16ToFixedPointFraction1616(1, -4, &FPF, nullptr);
   assertEqual(Multiply16ByFixedPointFraction1616(0, FPF), 0);
@@ -294,7 +294,7 @@ test(T1115Multiply16ByFixedPointFraction1616_1DivM4_Pos) {
   assertEqual(Multiply16ByFixedPointFraction1616(8000, FPF), -2000);
   assertEqual(Multiply16ByFixedPointFraction1616(9000, FPF), -2250);
 }
-test(T1111Multiply16ByFixedPointFraction1616_1Div4_Neg) {
+test(T1161Multiply16ByFixedPointFraction1616_1Div4_Neg) {
   int32_t FPF;
   Ratio16ToFixedPointFraction1616(1, 4, nullptr, &FPF);
   assertEqual(Multiply16ByFixedPointFraction1616(0, FPF), 0);
@@ -322,7 +322,7 @@ test(T1111Multiply16ByFixedPointFraction1616_1Div4_Neg) {
   assertEqual(Multiply16ByFixedPointFraction1616(-8000, FPF), -2000);
   assertEqual(Multiply16ByFixedPointFraction1616(-9000, FPF), -2250);
 }
-test(T1110Multiply16ByFixedPointFraction1616_1Div4_Pos) {
+test(T1160Multiply16ByFixedPointFraction1616_1Div4_Pos) {
   int32_t FPF;
   Ratio16ToFixedPointFraction1616(1, 4, &FPF, nullptr);
   assertEqual(Multiply16ByFixedPointFraction1616(0, FPF), 0);
@@ -351,7 +351,7 @@ test(T1110Multiply16ByFixedPointFraction1616_1Div4_Pos) {
   assertEqual(Multiply16ByFixedPointFraction1616(9000, FPF), 2250);
 }
 
-test(T1100Ratio16ToFixedPointFraction1616) {
+test(T1150Ratio16ToFixedPointFraction1616) {
   int32_t fpfP, fpfN;
 
   // handling of 0
@@ -505,6 +505,382 @@ test(T1100Ratio16ToFixedPointFraction1616) {
   fpfP = fpfN = -2468; Ratio16ToFixedPointFraction1616(-9, -5, &fpfP, &fpfN);
   assertEqual(fpfP, (long)1 * 0x10000 + 0xCCCD);
   assertEqual(fpfN, (long)1 * 0x10000 + 0xCCCC);
+}
+
+test(T1136Multiply8ByFixedPointFraction88_5DivM9_Neg) {
+  int16_t FPF;
+  Ratio8ToFixedPointFraction88(5, -9, nullptr, &FPF);
+  assertEqual(Multiply8ByFixedPointFraction88(0, FPF), 0);
+
+  assertEqual(Multiply8ByFixedPointFraction88(-1, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(-2, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(-3, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(-4, FPF), 3);
+  assertEqual(Multiply8ByFixedPointFraction88(-5, FPF), 3);
+  assertEqual(Multiply8ByFixedPointFraction88(-6, FPF), 4);
+  assertEqual(Multiply8ByFixedPointFraction88(-7, FPF), 4);
+  assertEqual(Multiply8ByFixedPointFraction88(-8, FPF), 5);
+  assertEqual(Multiply8ByFixedPointFraction88(-9, FPF), 5);
+
+  assertEqual(Multiply8ByFixedPointFraction88(-10, FPF), 6);
+  assertEqual(Multiply8ByFixedPointFraction88(-100, FPF), 56);
+}
+
+test(T1135Multiply8ByFixedPointFraction88_5DivM9_Pos) {
+  int16_t FPF;
+  Ratio8ToFixedPointFraction88(5, -9, &FPF, nullptr);
+  assertEqual(Multiply8ByFixedPointFraction88(0, FPF), 0);
+
+  assertEqual(Multiply8ByFixedPointFraction88(1, FPF), 0);
+  assertEqual(Multiply8ByFixedPointFraction88(2, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(3, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(4, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(5, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(6, FPF), -3);
+  assertEqual(Multiply8ByFixedPointFraction88(7, FPF), -3);
+  assertEqual(Multiply8ByFixedPointFraction88(8, FPF), -4);
+  assertEqual(Multiply8ByFixedPointFraction88(9, FPF), -5);
+
+  assertEqual(Multiply8ByFixedPointFraction88(10, FPF), -5);
+  assertEqual(Multiply8ByFixedPointFraction88(100, FPF), -55);
+}
+test(T1131Multiply8ByFixedPointFraction88_5Div9_Neg) {
+  int16_t FPF;
+  Ratio8ToFixedPointFraction88(5, 9, nullptr, &FPF);
+  assertEqual(Multiply8ByFixedPointFraction88(0, FPF), 0);
+
+  assertEqual(Multiply8ByFixedPointFraction88(-1, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(-2, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(-3, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(-4, FPF), -3);
+  assertEqual(Multiply8ByFixedPointFraction88(-5, FPF), -3);
+  assertEqual(Multiply8ByFixedPointFraction88(-6, FPF), -4);
+  assertEqual(Multiply8ByFixedPointFraction88(-7, FPF), -4);
+  assertEqual(Multiply8ByFixedPointFraction88(-8, FPF), -5);
+  assertEqual(Multiply8ByFixedPointFraction88(-9, FPF), -5);
+
+  assertEqual(Multiply8ByFixedPointFraction88(-10, FPF), -6);
+  assertEqual(Multiply8ByFixedPointFraction88(-100, FPF), -56);
+}
+test(T1130Multiply8ByFixedPointFraction88_5Div9_Pos) {
+  int16_t FPF;
+  Ratio8ToFixedPointFraction88(5, 9, &FPF, nullptr);
+  assertEqual(Multiply8ByFixedPointFraction88(0, FPF), 0);
+
+  assertEqual(Multiply8ByFixedPointFraction88(1, FPF), 0);
+  assertEqual(Multiply8ByFixedPointFraction88(2, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(3, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(4, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(5, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(6, FPF), 3);
+  assertEqual(Multiply8ByFixedPointFraction88(7, FPF), 3);
+  assertEqual(Multiply8ByFixedPointFraction88(8, FPF), 4);
+  assertEqual(Multiply8ByFixedPointFraction88(9, FPF), 5);
+
+  assertEqual(Multiply8ByFixedPointFraction88(10, FPF), 5);
+  assertEqual(Multiply8ByFixedPointFraction88(100, FPF), 55);
+}
+
+test(T1126Multiply8ByFixedPointFraction88_1DivM3_Neg) {
+  int16_t FPF;
+  Ratio8ToFixedPointFraction88(1, -3, nullptr, &FPF);
+  assertEqual(Multiply8ByFixedPointFraction88(0, FPF), 0);
+
+  assertEqual(Multiply8ByFixedPointFraction88(-1, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(-2, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(-3, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(-4, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(-5, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(-6, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(-7, FPF), 3);
+  assertEqual(Multiply8ByFixedPointFraction88(-8, FPF), 3);
+  assertEqual(Multiply8ByFixedPointFraction88(-9, FPF), 3);
+
+  assertEqual(Multiply8ByFixedPointFraction88(-10, FPF), 4);
+  assertEqual(Multiply8ByFixedPointFraction88(-100, FPF), 34);
+}
+test(T1125Multiply8ByFixedPointFraction88_1DivM3_Pos) {
+  int16_t FPF;
+  Ratio8ToFixedPointFraction88(1, -3, &FPF, nullptr);
+  assertEqual(Multiply8ByFixedPointFraction88(0, FPF), 0);
+
+  assertEqual(Multiply8ByFixedPointFraction88(1, FPF), 0);
+  assertEqual(Multiply8ByFixedPointFraction88(2, FPF), 0);
+  assertEqual(Multiply8ByFixedPointFraction88(3, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(4, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(5, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(6, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(7, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(8, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(9, FPF), -3);
+
+  assertEqual(Multiply8ByFixedPointFraction88(10, FPF), -3);
+  assertEqual(Multiply8ByFixedPointFraction88(100, FPF), -33);
+}
+test(T1121Multiply8ByFixedPointFraction88_1Div3_Neg) {
+  int16_t FPF;
+  Ratio8ToFixedPointFraction88(1, 3, nullptr, &FPF);
+  assertEqual(Multiply8ByFixedPointFraction88(0, FPF), 0);
+
+  assertEqual(Multiply8ByFixedPointFraction88(-1, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(-2, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(-3, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(-4, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(-5, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(-6, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(-7, FPF), -3);
+  assertEqual(Multiply8ByFixedPointFraction88(-8, FPF), -3);
+  assertEqual(Multiply8ByFixedPointFraction88(-9, FPF), -3);
+
+  assertEqual(Multiply8ByFixedPointFraction88(-10, FPF), -4);
+  assertEqual(Multiply8ByFixedPointFraction88(-100, FPF), -34);
+}
+test(T1120Multiply8ByFixedPointFraction88_1Div3_Pos) {
+  int16_t FPF;
+  Ratio8ToFixedPointFraction88(1, 3, &FPF, nullptr);
+  assertEqual(Multiply8ByFixedPointFraction88(0, FPF), 0);
+
+  assertEqual(Multiply8ByFixedPointFraction88(1, FPF), 0);
+  assertEqual(Multiply8ByFixedPointFraction88(2, FPF), 0);
+  assertEqual(Multiply8ByFixedPointFraction88(3, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(4, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(5, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(6, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(7, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(8, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(9, FPF), 3);
+
+  assertEqual(Multiply8ByFixedPointFraction88(10, FPF), 3);
+  assertEqual(Multiply8ByFixedPointFraction88(100, FPF), 33);
+}
+
+test(T1116Multiply8ByFixedPointFraction88_1DivM4_Neg) {
+  int16_t FPF;
+  Ratio8ToFixedPointFraction88(1, -4, nullptr, &FPF);
+  assertEqual(Multiply8ByFixedPointFraction88(0, FPF), 0);
+
+  assertEqual(Multiply8ByFixedPointFraction88(-1, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(-2, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(-3, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(-4, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(-5, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(-6, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(-7, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(-8, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(-9, FPF), 3);
+
+  assertEqual(Multiply8ByFixedPointFraction88(-10, FPF), 3);
+  assertEqual(Multiply8ByFixedPointFraction88(-100, FPF), 25);
+}
+test(T1115Multiply8ByFixedPointFraction88_1DivM4_Pos) {
+  int16_t FPF;
+  Ratio8ToFixedPointFraction88(1, -4, &FPF, nullptr);
+  assertEqual(Multiply8ByFixedPointFraction88(0, FPF), 0);
+
+  assertEqual(Multiply8ByFixedPointFraction88(1, FPF), 0);
+  assertEqual(Multiply8ByFixedPointFraction88(2, FPF), 0);
+  assertEqual(Multiply8ByFixedPointFraction88(3, FPF), 0);
+  assertEqual(Multiply8ByFixedPointFraction88(4, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(5, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(6, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(7, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(8, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(9, FPF), -2);
+
+  assertEqual(Multiply8ByFixedPointFraction88(10, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(100, FPF), -25);
+}
+test(T1111Multiply8ByFixedPointFraction88_1Div4_Neg) {
+  int16_t FPF;
+  Ratio8ToFixedPointFraction88(1, 4, nullptr, &FPF);
+  assertEqual(Multiply8ByFixedPointFraction88(0, FPF), 0);
+
+  assertEqual(Multiply8ByFixedPointFraction88(-1, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(-2, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(-3, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(-4, FPF), -1);
+  assertEqual(Multiply8ByFixedPointFraction88(-5, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(-6, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(-7, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(-8, FPF), -2);
+  assertEqual(Multiply8ByFixedPointFraction88(-9, FPF), -3);
+
+  assertEqual(Multiply8ByFixedPointFraction88(-10, FPF), -3);
+  assertEqual(Multiply8ByFixedPointFraction88(-100, FPF), -25);
+}
+test(T1110Multiply8ByFixedPointFraction88_1Div4_Pos) {
+  int16_t FPF;
+  Ratio8ToFixedPointFraction88(1, 4, &FPF, nullptr);
+  assertEqual(Multiply8ByFixedPointFraction88(0, FPF), 0);
+
+  assertEqual(Multiply8ByFixedPointFraction88(1, FPF), 0);
+  assertEqual(Multiply8ByFixedPointFraction88(2, FPF), 0);
+  assertEqual(Multiply8ByFixedPointFraction88(3, FPF), 0);
+  assertEqual(Multiply8ByFixedPointFraction88(4, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(5, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(6, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(7, FPF), 1);
+  assertEqual(Multiply8ByFixedPointFraction88(8, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(9, FPF), 2);
+
+  assertEqual(Multiply8ByFixedPointFraction88(10, FPF), 2);
+  assertEqual(Multiply8ByFixedPointFraction88(100, FPF), 25);
+}
+
+test(T1100Ratio8ToFixedPointFraction88) {
+  int16_t fpfP, fpfN;
+
+  // handling of 0
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(0, 0, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)0 * 0x100 + 0x00);
+  assertEqual(fpfN, (int16_t)0 * 0x100 + 0x00);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(0, 8, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)0 * 0x100 + 0x00);
+  assertEqual(fpfN, (int16_t)0 * 0x100 + 0x00);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(8, 0, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)0 * 0x100 + 0x00);
+  assertEqual(fpfN, (int16_t)0 * 0x100 + 0x00);
+
+  // equal ratios
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(1, 1, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)1 * 0x100 + 0x00);
+  assertEqual(fpfN, (int16_t)1 * 0x100 + 0x00);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(12, 12, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)1 * 0x100 + 0x00);
+  assertEqual(fpfN, (int16_t)1 * 0x100 + 0x00);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-2, 2, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-1 * 0x100 + 0x00);
+  assertEqual(fpfN, (int16_t)-1 * 0x100 + 0x00);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(3, -3, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-1 * 0x100 + 0x00);
+  assertEqual(fpfN, (int16_t)-1 * 0x100 + 0x00);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-4, -4, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)1 * 0x100 + 0x00);
+  assertEqual(fpfN, (int16_t)1 * 0x100 + 0x00);
+
+  // exact ratios
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(8, 2, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)4 * 0x100 + 0x00);
+  assertEqual(fpfN, (int16_t)4 * 0x100 + 0x00);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-12, 4, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-3 * 0x100 + 0x00);
+  assertEqual(fpfN, (int16_t)-3 * 0x100 + 0x00);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(30, -5, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-6 * 0x100 + 0x00);
+  assertEqual(fpfN, (int16_t)-6 * 0x100 + 0x00);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-56, -7, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)8 * 0x100 + 0x00);
+  assertEqual(fpfN, (int16_t)8 * 0x100 + 0x00);
+
+  // theoretical exact ratios
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(1, 3, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)0 * 0x100 + 0x56);
+  assertEqual(fpfN, (int16_t)0 * 0x100 + 0x55);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-1, 3, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-1 * 0x100 + 0xAA);
+  assertEqual(fpfN, (int16_t)-1 * 0x100 + 0xAB);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(1, -3, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-1 * 0x100 + 0xAA);
+  assertEqual(fpfN, (int16_t)-1 * 0x100 + 0xAB);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-1, -3, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)0 * 0x100 + 0x56);
+  assertEqual(fpfN, (int16_t)0 * 0x100 + 0x55);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(2, 3, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)0 * 0x100 + 0xAB);
+  assertEqual(fpfN, (int16_t)0 * 0x100 + 0xAA);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-2, 3, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-1 * 0x100 + 0x55);
+  assertEqual(fpfN, (int16_t)-1 * 0x100 + 0x56);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(2, -3, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-1 * 0x100 + 0x55);
+  assertEqual(fpfN, (int16_t)-1 * 0x100 + 0x56);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-2, -3, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)0 * 0x100 + 0xAB);
+  assertEqual(fpfN, (int16_t)0 * 0x100 + 0xAA);
+
+  // binary fraction
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(1, 2, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)0 * 0x100 + 0x80);
+  assertEqual(fpfN, (int16_t)0 * 0x100 + 0x80);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-3, 4, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-1 * 0x100 + 0x40);
+  assertEqual(fpfN, (int16_t)-1 * 0x100 + 0x40);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(3, -8, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-1 * 0x100 + 0xA0);
+  assertEqual(fpfN, (int16_t)-1 * 0x100 + 0xA0);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-3, -16, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)0 * 0x100 + 0x30);
+  assertEqual(fpfN, (int16_t)0 * 0x100 + 0x30);
+
+  // binary vulgar fraction
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(3, 2, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)1 * 0x100 + 0x80);
+  assertEqual(fpfN, (int16_t)1 * 0x100 + 0x80);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-7, 4, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-2 * 0x100 + 0x40);
+  assertEqual(fpfN, (int16_t)-2 * 0x100 + 0x40);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(11, -8, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-2 * 0x100 + 0xA0);
+  assertEqual(fpfN, (int16_t)-2 * 0x100 + 0xA0);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-19, -16, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)1 * 0x100 + 0x30);
+  assertEqual(fpfN, (int16_t)1 * 0x100 + 0x30);
+
+  // inexact fraction
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(5, 9, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)0 * 0x100 + 0x8F);
+  assertEqual(fpfN, (int16_t)0 * 0x100 + 0x8E);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-5, 9, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-1 * 0x100 + 0x71);
+  assertEqual(fpfN, (int16_t)-1 * 0x100 + 0x72);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(5, -9, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-1 * 0x100 + 0x71);
+  assertEqual(fpfN, (int16_t)-1 * 0x100 + 0x72);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-5, -9, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)0 * 0x100 + 0x8F);
+  assertEqual(fpfN, (int16_t)0 * 0x100 + 0x8E);
+
+  // inexact vulgar fraction
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(9, 5, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)1 * 0x100 + 0xCD);
+  assertEqual(fpfN, (int16_t)1 * 0x100 + 0xCC);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-9, 5, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-2 * 0x100 + 0x33);
+  assertEqual(fpfN, (int16_t)-2 * 0x100 + 0x34);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(9, -5, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)-2 * 0x100 + 0x33);
+  assertEqual(fpfN, (int16_t)-2 * 0x100 + 0x34);
+
+  fpfP = fpfN = -2468; Ratio8ToFixedPointFraction88(-9, -5, &fpfP, &fpfN);
+  assertEqual(fpfP, (int16_t)1 * 0x100 + 0xCD);
+  assertEqual(fpfN, (int16_t)1 * 0x100 + 0xCC);
 }
 
 test(T1000CalcGCD) {

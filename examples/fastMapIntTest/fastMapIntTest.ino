@@ -8,10 +8,12 @@
 
 #include "FastMap.h"
 
-int x;
+int x, calcInfo;
+long xx;
 int nErrors = 0;
 FastMapInt fastMapInt;
 FastMapLong fastMapLong;
+const int LogCalcInfo = 0;
 
 void setup()
 {
@@ -38,15 +40,16 @@ void setup()
         ++nErrors;
       }
     }
+    if(nErrors > 99) { break; }
   }
   // check new FastMapInt function with exact 4:1 mapping
   Serial.println(F("  FastMapInt: i/4 ..."));
   fastMapInt.init(0, 1024, 0, 256);  // typical mapping of ADC 0-1023 to DAC 0-255
   for (int i = -20; i < 2048; ++i)
   {
-    x = fastMapInt.map(i);
+    x = fastMapInt.map(i, &calcInfo);
     if((x + 1000) != ((i + 4000) / 4)) {
-      Serial.print(F("!!! FastMapInt: i/4 != x: i=")); Serial.print(i, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
+      Serial.print(F("!!! FastMapInt: i/4 != x: i=")); Serial.print(i, DEC); Serial.print(F(", cI=")); Serial.print(calcInfo, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
       ++nErrors;
     }
     // check back()
@@ -55,13 +58,17 @@ void setup()
       Serial.print(F("!!! FastMapInt: bv != map(back(x)): bv=")); Serial.print(backVal, DEC); Serial.print(F(", i=")); Serial.print(i, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
       ++nErrors;
     }
+    if(LogCalcInfo){
+      Serial.print(F("    FastMapInt: i/4 i=")); Serial.print(i, DEC); Serial.print(F(", cI=")); Serial.print(calcInfo, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
+    }
+    if(nErrors > 99) { break; }
   }
   // check new FastMapLong function with exact 4:1 mapping
   Serial.println(F("  FastMapLong: i/4 ..."));
   fastMapLong.init(0, 1024, 0, 256);  // typical mapping of ADC 0-1023 to DAC 0-255
   for (int i = -20; i < 2048; ++i)
   {
-    x = fastMapLong.map(i);
+    x = fastMapLong.map(i, &calcInfo);
     if((x + 1000) != ((i + 4000) / 4)) {
       Serial.print(F("!!! fastMapLong: i/4 != x: i=")); Serial.print(i, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
       ++nErrors;
@@ -72,6 +79,10 @@ void setup()
       Serial.print(F("!!! fastMapLong: bv != map(back(x)): bv=")); Serial.print(backVal, DEC); Serial.print(F(", i=")); Serial.print(i, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
       ++nErrors;
     }
+    if(LogCalcInfo){
+      Serial.print(F("    FastMapLong: i/4 i=")); Serial.print(i, DEC); Serial.print(F(", cI=")); Serial.print(calcInfo, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
+    }
+    if(nErrors > 99) { break; }
   }
 
   // mapping with offset and non-exact 3:1 (1/3) ratio
@@ -88,13 +99,14 @@ void setup()
         ++nErrors;
       }
     }
+    if(nErrors > 99) { break; }
   }
   // check new FastMapInt function with odd 3:1 mapping
   Serial.println(F("  FastMapInt: i/3 ..."));
   fastMapInt.init(20, 320, 50, 150); // results in inexact 1/3 maths
   for (int i = -20; i < 400; ++i)
   {
-    x = fastMapInt.map(i);
+    x = fastMapInt.map(i, &calcInfo);
     if((x - 50 + 1000) != ((i - 20 + 3000) / 3)) {
       Serial.print(F("!!! FastMapInt: i/3 != x: i=")); Serial.print(i, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
       ++nErrors;
@@ -105,13 +117,17 @@ void setup()
       Serial.print(F("!!! FastMapInt: bv != map(back(x)): bv=")); Serial.print(backVal, DEC); Serial.print(F(", i=")); Serial.print(i, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
       ++nErrors;
     }
+    if(LogCalcInfo){
+      Serial.print(F("    FastMapInt: i/3 i=")); Serial.print(i, DEC); Serial.print(F(", cI=")); Serial.print(calcInfo, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
+    }
+    if(nErrors > 99) { break; }
   }
   // check new FastMapInt function with odd 3:1 mapping
   Serial.println(F("  fastMapLong: i/3 ..."));
   fastMapLong.init(20, 320, 50, 150); // results in inexact 1/3 maths
   for (int i = -20; i < 400; ++i)
   {
-    x = fastMapLong.map(i);
+    x = fastMapLong.map(i, &calcInfo);
     if((x - 50 + 1000) != ((i - 20 + 3000) / 3)) {
       Serial.print(F("!!! fastMapLong: i/3 != x: i=")); Serial.print(i, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
       ++nErrors;
@@ -122,6 +138,50 @@ void setup()
       Serial.print(F("!!! fastMapLong: bv != map(back(x)): bv=")); Serial.print(backVal, DEC); Serial.print(F(", i=")); Serial.print(i, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
       ++nErrors;
     }
+    if(LogCalcInfo){
+      Serial.print(F("    FastMapLong: i/3 i=")); Serial.print(i, DEC); Serial.print(F(", cI=")); Serial.print(calcInfo, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
+    }
+    if(nErrors > 99) { break; }
+  }
+
+  Serial.println(F("... FastMapLong: i/3: check cI changes from 4 to 8"));
+  for (long ii = 24594; ii <= 24595; ii += 1)
+  {
+    xx = fastMapLong.map(ii, &calcInfo);
+    if((xx - 50 + 1000000) != ((ii - 20 + 3000000) / 3)) {
+      Serial.print(F("!!! fastMapLong: ii/3 != xx: ii=")); Serial.print(ii, DEC); Serial.print(F(", xx=")); Serial.println(xx, DEC);
+      ++nErrors;
+    }
+    // check back()
+    long backVal = fastMapLong.map(fastMapLong.back(xx));
+    if(xx != backVal) {
+      Serial.print(F("!!! fastMapLong: bv != map(back(xx)): bv=")); Serial.print(backVal, DEC); Serial.print(F(", ii=")); Serial.print(ii, DEC); Serial.print(F(", xx=")); Serial.println(xx, DEC);
+      ++nErrors;
+    }
+    if(LogCalcInfo || 1){
+      Serial.print(F("    FastMapLong: i/3 ii=")); Serial.print(ii, DEC); Serial.print(F(", cI=")); Serial.print(calcInfo, DEC); Serial.print(F(",x x=")); Serial.println(xx, DEC);
+    }
+    if(nErrors > 99) { break; }
+  }
+
+  Serial.println(F("... FastMapLong: i/3: check cI changes from 8 to 32"));
+  for (long ii = 32786; ii <= 32787; ii += 1)
+  {
+    xx = fastMapLong.map(ii, &calcInfo);
+    if((xx - 50 + 1000000) != ((ii - 20 + 3000000) / 3)) {
+      Serial.print(F("!!! fastMapLong: ii/3 != xx: ii=")); Serial.print(ii, DEC); Serial.print(F(", xx=")); Serial.println(xx, DEC);
+      ++nErrors;
+    }
+    // check back()
+    long backVal = fastMapLong.map(fastMapLong.back(xx));
+    if(xx != backVal) {
+      Serial.print(F("!!! fastMapLong: bv != map(back(xx)): bv=")); Serial.print(backVal, DEC); Serial.print(F(", ii=")); Serial.print(ii, DEC); Serial.print(F(", xx=")); Serial.println(xx, DEC);
+      ++nErrors;
+    }
+    if(LogCalcInfo || 1){
+      Serial.print(F("    FastMapLong: i/3 ii=")); Serial.print(ii, DEC); Serial.print(F(", cI=")); Serial.print(calcInfo, DEC); Serial.print(F(",x x=")); Serial.println(xx, DEC);
+    }
+    if(nErrors > 99) { break; }
   }
 
   // how did it go?

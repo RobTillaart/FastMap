@@ -114,33 +114,49 @@ void FastMapInt::init(const int in_min_incl, const int in_max_excl, const int ou
   _out_min_incl = out_min_incl;
   _out_max_excl = out_max_excl;
 
-  _d_in_wider = _d_in = in_max_excl - in_min_incl;
-  _d_in_less1 = _d_in - (_d_in > 0 ? 1 : -1);
+  _d_in = in_max_excl - in_min_incl;
+  _d_out = out_max_excl - out_min_incl;
 
-  _d_out_wider = _d_out = out_max_excl - out_min_incl;
+  // can we simplify maths? eg in/out of 1024/256 can be refactored as 4/1
+  _d_GCF = CalcGCD(_d_in, _d_out);
+  if(_d_GCF > 1) {
+    _d_in /= _d_GCF;
+    _d_out /= _d_GCF;
+  }
+
+  _d_in_less1 = _d_in - (_d_in > 0 ? 1 : -1);
   _d_out_less1 = _d_out - (_d_out > 0 ? 1 : -1);
 
-#if   defined(__INT_WIDTH__) && (__INT_WIDTH__ == 8)
-#pragma message("Good news: int width is " STRING(__INT_WIDTH__) )
-  Ratio8ToFixedPointFraction88(_d_out, _d_in, &_fixedPointFraction_Pos, &_fixedPointFraction_Neg);
-#elif   defined(__INT_WIDTH__) && (__INT_WIDTH__ == 16)
-#pragma message("Good news: int width is " STRING(__INT_WIDTH__) )
-  Ratio16ToFixedPointFraction1616(_d_out, _d_in, &_fixedPointFraction_Pos, &_fixedPointFraction_Neg);
-#elif defined(__INT_WIDTH__) && (__INT_WIDTH__ == 32)
-#pragma message("Good news: int width is " STRING(__INT_WIDTH__))
-  Ratio32ToFixedPointFraction3232(_d_out, _d_in, &_fixedPointFraction_Pos, &_fixedPointFraction_Neg);
-#elif defined(__INT_WIDTH__) && (__INT_WIDTH__ == 64)
-#pragma message("Good news: int width is " STRING(__INT_WIDTH__))
-#pragma message("Dodgy news: compromise because int width is " STRING(__INT_WIDTH__) )
-  Ratio64ToFixedPointFraction3232(_d_out, _d_in, &_fixedPointFraction_Pos, &_fixedPointFraction_Neg);
-#elif defined(__INT_WIDTH__)
-#warning("Unexpected news: unexpected int widths of " STRING(__INT_WIDTH__) ". I hope that 'long' is wider")
-#error "Cannot continue"
-  RatioXXToFixedPointFractionXXXX(_d_out, _d_in, &_fixedPointFraction_Pos, &_fixedPointFraction_Neg);
-#else
-#warning("Unexpected news: Cannot find int width. Let's hope that 'long' is wider")
-#error "Cannot continue"
-  RatioXXToFixedPointFractionXXXX(_d_out, _d_in, &_fixedPointFraction_Pos, &_fixedPointFraction_Neg);
+  double theRatio = 1.0 + (1.0 * abs(_d_out) ) / abs(_d_in);
+
+  double factor8 = (__INT8_MAX__) / theRatio;
+  if(factor8 > __INT8_MAX__) { factor8 = __INT8_MAX__; }
+  if(max(abs(_d_in), abs(_d_out)) > __INT8_MAX__) { factor8 = 0; } // kill factor if numbers too big
+  _d_FactorToMax8 = factor8 > __INT_MAX__? __INT_MAX__ : factor8;
+
+  double factor16 = (__INT16_MAX__) / theRatio;
+  if(factor16 > __INT16_MAX__) { factor16 = __INT16_MAX__; }
+  if(max(abs(_d_in), abs(_d_out)) > __INT16_MAX__) { factor16 = 0; } // kill factor if numbers too big
+  _d_FactorToMax16 = factor16 > __INT_MAX__? __INT_MAX__ : factor16;
+
+  double factor32 = (__INT32_MAX__) / theRatio;
+  if(factor32 > __INT32_MAX__) { factor32 = __INT32_MAX__; }
+  if(max(abs(_d_in), abs(_d_out)) > __INT32_MAX__) { factor32 = 0; } // kill factor if numbers too big
+  _d_FactorToMax32 = factor32 > __INT_MAX__? __INT_MAX__ : factor32;
+
+  // some of the following may overflow; no-one cares
+  Ratio8ToFixedPointFraction88(_d_out, _d_in, &_fixedPoint88Fraction_Pos, &_fixedPoint88Fraction_Neg);
+  Ratio16ToFixedPointFraction1616(_d_out, _d_in, &_fixedPoint1616Fraction_Pos, &_fixedPoint1616Fraction_Neg);
+  Ratio32ToFixedPointFraction3232(_d_out, _d_in, &_fixedPoint3232Fraction_Pos, &_fixedPoint3232Fraction_Neg);
+
+#if 0 // DEBUG help
+Serial.print("_d_in=");Serial.print(_d_in, DEC);Serial.print(", _d_out=");Serial.print(_d_out, DEC);Serial.print(", _d_GCF=");Serial.println(_d_GCF, DEC);
+Serial.print("f8=");Serial.print(factor8, 6);Serial.print(", f16=");Serial.print(factor16, 6);Serial.print(", f32=");Serial.println(factor32, 6);
+Serial.print("__INT8_MAX__=");Serial.print(__INT8_MAX__, DEC);Serial.print(", __INT16_MAX__=");Serial.print(__INT16_MAX__, DEC);Serial.print(", __INT32_MAX__=");Serial.println(__INT32_MAX__, DEC);
+Serial.print("M8=");Serial.print(_d_FactorToMax8, DEC);Serial.print(", M16=");Serial.print(_d_FactorToMax16, DEC);Serial.print(", M32=");Serial.println(_d_FactorToMax32, DEC);
+Serial.print("R8P=");Serial.print(_fixedPoint88Fraction_Pos / 256.0, 3);Serial.print(", R8N=");Serial.print(_fixedPoint88Fraction_Neg / 256.0, 3);
+Serial.print(", R16P=");Serial.print(_fixedPoint1616Fraction_Pos / 65536.0, 3);Serial.print(", R8N=");Serial.print(_fixedPoint1616Fraction_Neg / 65536.0, 3);
+Serial.print(", R32P=");Serial.print(_fixedPoint3232Fraction_Pos / 4294967296.0, 3);Serial.print(", R8N=");Serial.println(_fixedPoint3232Fraction_Neg / 4294967296.0, 3);
 #endif
 }
 
@@ -175,28 +191,40 @@ void FastMapLong::init(const long in_min_incl, const long in_max_excl, const lon
   _out_min_incl = out_min_incl;
   _out_max_excl = out_max_excl;
 
-  _d_in_wider = _d_in = in_max_excl - in_min_incl;
-  _d_in_less1 = _d_in - (_d_in > 0 ? 1 : -1);
+  _d_in = in_max_excl - in_min_incl;
+  _d_out = out_max_excl - out_min_incl;
 
-  _d_out_wider = _d_out = out_max_excl - out_min_incl;
+  // can we simplify maths? eg in/out of 1024/256 can be refactored as 4/1
+  _d_GCF = CalcGCD(_d_in, _d_out);
+  if(_d_GCF > 1) {
+    _d_in /= _d_GCF;
+    _d_out /= _d_GCF;
+  }
+
+  _d_in_less1 = _d_in - (_d_in > 0 ? 1 : -1);
   _d_out_less1 = _d_out - (_d_out > 0 ? 1 : -1);
 
-#if   defined(__LONG_WIDTH__) && (__LONG_WIDTH__ == 16)
-  Ratio16ToFixedPointFraction1616(_d_out, _d_in, &_fixedPointFraction_Pos, &_fixedPointFraction_Neg);
-#elif defined(__LONG_WIDTH__) && (__LONG_WIDTH__ == 32)
-  Ratio32ToFixedPointFraction3232(_d_out, _d_in, &_fixedPointFraction_Pos, &_fixedPointFraction_Neg);
-#elif defined(__LONG_WIDTH__) && (__LONG_WIDTH__ == 64)
-#pragma message("Dodgy news: compromise because long width is " STRING(__LONG_WIDTH__) )
-  Ratio64ToFixedPointFraction3232(_d_out, _d_in, &_fixedPointFraction_Pos, &_fixedPointFraction_Neg);
-#elif defined(__LONG_WIDTH__)
-#pragma message("Bad news: long width is " STRING(__LONG_WIDTH__) )
-#error "Cannot continue"
-  RatioXXToFixedPointFractionXXXX(_d_out, _d_in, &_fixedPointFraction_Pos, &_fixedPointFraction_Neg);
-#else
-#error "Oops: Unable to determine long width"
-#error "Cannot continue"
-  RatioXXToFixedPointFractionXXXX(_d_out, _d_in, &_fixedPointFraction_Pos, &_fixedPointFraction_Neg);
-#endif
+  double theRatio = 1.0 + (1.0 * abs(_d_out) ) / abs(_d_in);
+
+  double factor8 = (__INT8_MAX__) / theRatio;
+  if(factor8 > __INT8_MAX__) { factor8 = __INT8_MAX__; }
+  if(max(abs(_d_in), abs(_d_out)) > __INT8_MAX__) { factor8 = 0; } // kill factor if numbers too big
+  _d_FactorToMax8 = factor8 > __INT_MAX__? __INT_MAX__ : factor8;
+
+  double factor16 = (__INT16_MAX__) / theRatio;
+  if(factor16 > __INT16_MAX__) { factor16 = __INT16_MAX__; }
+  if(max(abs(_d_in), abs(_d_out)) > __INT16_MAX__) { factor16 = 0; } // kill factor if numbers too big
+  _d_FactorToMax16 = factor16 > __INT_MAX__? __INT_MAX__ : factor16;
+
+  double factor32 = (__INT32_MAX__) / theRatio;
+  if(factor32 > __INT32_MAX__) { factor32 = __INT32_MAX__; }
+  if(max(abs(_d_in), abs(_d_out)) > __INT32_MAX__) { factor32 = 0; } // kill factor if numbers too big
+  _d_FactorToMax32 = factor32 > __INT_MAX__? __INT_MAX__ : factor32;
+
+  // some of the following may overflow; no-one cares
+  Ratio8ToFixedPointFraction88(_d_out, _d_in, &_fixedPoint88Fraction_Pos, &_fixedPoint88Fraction_Neg);
+  Ratio16ToFixedPointFraction1616(_d_out, _d_in, &_fixedPoint1616Fraction_Pos, &_fixedPoint1616Fraction_Neg);
+  Ratio32ToFixedPointFraction3232(_d_out, _d_in, &_fixedPoint3232Fraction_Pos, &_fixedPoint3232Fraction_Neg);
 }
 
 long FastMapLong::constrainedMap(long value)
@@ -218,6 +246,17 @@ long FastMapLong::upperConstrainedMap(long value)
     return this->map(value);
 }
 
+int8_t Multiply8ByFixedPointFraction88(int8_t factor, int16_t fixedPointFraction){
+  if(factor == 0 || fixedPointFraction == 0) { return 0; }
+  bool bFPFNeg = fixedPointFraction < 0;
+  if(bFPFNeg){
+    fixedPointFraction = -fixedPointFraction;
+  }
+  int16_t res = factor;
+  res *= fixedPointFraction;
+  res >>= 8;
+  return bFPFNeg ? -res : res;
+}
 int16_t Multiply16ByFixedPointFraction1616(int16_t factor, int32_t fixedPointFraction){
   if(factor == 0 || fixedPointFraction == 0) { return 0; }
   bool bFPFNeg = fixedPointFraction < 0;
@@ -251,6 +290,22 @@ int64_t Multiply64ByFixedPointFraction3232(int64_t factor, int64_t fixedPointFra
   res *= fixedPointFraction;
   res >>= 32;
   return bFPFNeg ? -res : res;
+}
+
+// we need two fractions, depending on whether we're multiplying a +ve or -ve factor later
+void Ratio8ToFixedPointFraction88(int8_t numerator, int8_t denominator, int16_t* fixedPointFraction_Pos, int16_t* fixedPointFraction_Neg){
+  int16_t resP = 0, resN = 0;
+  if(numerator != 0 && denominator != 0) {
+    resP = numerator;
+    resN = resP <<= 8;
+    // round slightly to help truncated fraction for +ve numbers
+    int8_t rounding = abs(denominator) - 1;
+    resP += resP > 0 ? rounding : -rounding;
+    resP /= denominator;
+    resN /= denominator; // always need to round down for -ve numbers
+  }
+  if(fixedPointFraction_Pos) { *fixedPointFraction_Pos = resP; }
+  if(fixedPointFraction_Neg) { *fixedPointFraction_Neg = resN; }
 }
 
 // we need two fractions, depending on whether we're multiplying a +ve or -ve factor later
