@@ -1,17 +1,19 @@
 //
 //    FILE: fastMapIntSpeed.ino
 //  AUTHOR: Bryan White (Brewmanz), based on Rob Tillaart code
-// VERSION: 0.1.0
-// PURPOSE: demo of speed of FastMapInt class
-//    DATE: 2020-08-06
+// VERSION: 0.1.1
+// PURPOSE: demo of speed of FastMapInt/FastMapLong class
+//    DATE: 2020-08-08
 //     URL: https://github.com/RobTillaart/FastMap
 
 #include "FastMap.h"
 
-uint32_t tStart, tStop, reference, fastTime;
+uint32_t tStart, tStop, refTime, fastMapIntTime, fastMapLongTime;
 volatile int x;
 
-FastMapInt mapper;
+FastMapInt fastMapInt;
+FastMapLong fastMapLong;
+int nRefCalls = 0, nFastMapIntCalls = 0, nFastMapLongCalls = 0;
 
 void setup()
 {
@@ -30,41 +32,58 @@ void setup()
   {
     for (volatile int i = 0; i < 1000; ++i)	// just use 'sensible' values for map call
     {
+      ++nRefCalls;
       x = map(i, 0, 1024, 0, 256); //typical mapping of ADC 0-1023 to DAC 0-255
     }
   }
   tStop = micros();
-  reference = tStop-tStart;
-  Serial.println(F("Original map"));
-  Serial.print(F("  10000 calls, uS="));
-  Serial.println(reference);
-  Serial.print(F("  final x="));
-  Serial.println(x);
+  refTime = tStop-tStart;
+  Serial.println(F("Original map(long)"));
+  Serial.print(F("  "));Serial.print(nRefCalls, DEC);Serial.print(F(" calls, uS=")); Serial.println(refTime);
+  Serial.print(F("  final x="));Serial.println(x);
   Serial.println();
 
-  // FASTMAP
+  // FastMapInt
   Serial.flush(); // stop Serial cycle stealing during timing loops
-  mapper.init(0, 1024, 0, 256); //typical mapping of ADC 0-1023 to DAC 0-255
+  fastMapInt.init(0, 1024, 0, 256); //typical mapping of ADC 0-1023 to DAC 0-255
   tStart = micros();
   for (int j = 0; j < 10; ++j)  // loop up to 10K
   {
     for (volatile int i = 0; i < 1000; ++i)  // just use 'sensible' values for map call
     {
-      x = mapper.map(i);
+      ++nFastMapIntCalls;
+      x = fastMapInt.map(i);
     }
   }
   tStop = micros();
-  fastTime = tStop-tStart;
-  Serial.println(F("FastMapInt::map"));
-  Serial.print(F("  10000 calls, uS="));
-  Serial.println(fastTime);
-  Serial.print(F("  final x="));
-  Serial.println(x);
+  fastMapIntTime = tStop-tStart;
+  Serial.println(F("fastMapInt::map"));Serial.print(F("  "));Serial.print(nFastMapIntCalls, DEC);Serial.print(F(" calls, uS="));Serial.println(fastMapIntTime);
+  Serial.print(F("  final x="));Serial.println(x);
+  Serial.println();
+
+  // FastMapLong
+  Serial.flush(); // stop Serial cycle stealing during timing loops
+  fastMapLong.init(0, 1024, 0, 256); //typical mapping of ADC 0-1023 to DAC 0-255
+  tStart = micros();
+  for (int j = 0; j < 10; ++j)  // loop up to 10K
+  {
+    for (volatile int i = 0; i < 1000; ++i)  // just use 'sensible' values for map call
+    {
+      ++nFastMapLongCalls;
+      x = fastMapLong.map(i);
+    }
+  }
+  tStop = micros();
+  fastMapLongTime = tStop-tStart;
+  Serial.println(F("fastMapLong::map"));Serial.print(F("  "));Serial.print(nFastMapLongCalls, DEC);Serial.print(F(" calls, uS="));Serial.println(fastMapLongTime);
+  Serial.print(F("  final x="));Serial.println(x);
   Serial.println();
 
   // SUMMARY
-  Serial.print(F(" Speed-up Ratio:\t"));
-  Serial.println(1.0 * reference / fastTime, 3);
+  Serial.print(F(" Speed-up Ratio (Int):\t"));
+  Serial.println(1.0 * refTime / fastMapIntTime, 3);
+  Serial.print(F(" Speed-up Ratio (Long):\t"));
+  Serial.println(1.0 * refTime / fastMapLongTime, 3);
   Serial.println();
 
   Serial.println(F("\n...Done"));

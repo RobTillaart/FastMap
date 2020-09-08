@@ -1,9 +1,9 @@
 //
 //    FILE: fastMapIntTest.ino
 //  AUTHOR: Bryan White (Brewmanz)
-// VERSION: 0.1.0
-// PURPOSE: proof of FastMapInt class behaviour
-//    DATE: 2020-08-xx
+// VERSION: 0.1.1
+// PURPOSE: proof of FastMapInt/FastMapLong class behaviour
+//    DATE: 2020-08-08
 //     URL: https://github.com/RobTillaart/FastMap
 
 #include "FastMap.h"
@@ -11,6 +11,7 @@
 int x;
 int nErrors = 0;
 FastMapInt fastMapInt;
+FastMapLong fastMapLong;
 
 void setup()
 {
@@ -55,6 +56,23 @@ void setup()
       ++nErrors;
     }
   }
+  // check new FastMapLong function with exact 4:1 mapping
+  Serial.println(F("  FastMapLong: i/4 ..."));
+  fastMapLong.init(0, 1024, 0, 256);  // typical mapping of ADC 0-1023 to DAC 0-255
+  for (int i = -20; i < 2048; ++i)
+  {
+    x = fastMapLong.map(i);
+    if((x + 1000) != ((i + 4000) / 4)) {
+      Serial.print(F("!!! fastMapLong: i/4 != x: i=")); Serial.print(i, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
+      ++nErrors;
+    }
+    // check back()
+    int backVal = fastMapLong.map(fastMapLong.back(x));
+    if(x != backVal) {
+      Serial.print(F("!!! fastMapLong: bv != map(back(x)): bv=")); Serial.print(backVal, DEC); Serial.print(F(", i=")); Serial.print(i, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
+      ++nErrors;
+    }
+  }
 
   // mapping with offset and non-exact 3:1 (1/3) ratio
   // confirm existing map function
@@ -88,6 +106,23 @@ void setup()
       ++nErrors;
     }
   }
+  // check new FastMapInt function with odd 3:1 mapping
+  Serial.println(F("  fastMapLong: i/3 ..."));
+  fastMapLong.init(20, 320, 50, 150); // results in inexact 1/3 maths
+  for (int i = -20; i < 400; ++i)
+  {
+    x = fastMapLong.map(i);
+    if((x - 50 + 1000) != ((i - 20 + 3000) / 3)) {
+      Serial.print(F("!!! fastMapLong: i/3 != x: i=")); Serial.print(i, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
+      ++nErrors;
+    }
+    // check back()
+    int backVal = fastMapLong.map(fastMapLong.back(x));
+    if(x != backVal) {
+      Serial.print(F("!!! fastMapLong: bv != map(back(x)): bv=")); Serial.print(backVal, DEC); Serial.print(F(", i=")); Serial.print(i, DEC); Serial.print(F(", x=")); Serial.println(x, DEC);
+      ++nErrors;
+    }
+  }
 
   // how did it go?
   if(nErrors == 0){
@@ -99,6 +134,7 @@ void setup()
 
 void loop()
 {
+#if defined(LED_BUILTIN)
   // no errors? then 2 quick blips every second
   // otherwise slow blinking
   if(nErrors == 0){
@@ -117,6 +153,6 @@ void loop()
     digitalWrite(LED_BUILTIN, LOW);
     delay(750);
   }
+#endif
 }
-
 // -- END OF FILE --
