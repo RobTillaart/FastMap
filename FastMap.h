@@ -56,21 +56,40 @@ private:
     double _backfactor, _backbase;
 };
 
-// fixedPointFraction is a 8.8 number
-int8_t Multiply8ByFixedPointFraction88(int8_t factor, int16_t fixedPointFraction);
-// fixedPointFraction is a 16.16 number
-int16_t Multiply16ByFixedPointFraction1616(int16_t factor, int32_t fixedPointFraction);
-// fixedPointFraction is a 32.32 number
-int32_t Multiply32ByFixedPointFraction3232(int32_t factor, int64_t fixedPointFraction);
-// COMPROMISE until int128_t defined // fixedPointFraction is a 32.32 number
-int64_t Multiply64ByFixedPointFraction3232(int64_t factor, int64_t fixedPointFraction);
+
+struct FixedPointFraction16_t {
+  int16_t TheFraction;
+  int16_t BitsToShift;
+  int8_t MaxInput;
+  void Dump(Print* pPrint);
+};
+struct FixedPointFraction32_t {
+  int32_t TheFraction;
+  int16_t BitsToShift;
+  int16_t MaxInput;
+  void Dump(Print* pPrint);
+};
+struct FixedPointFraction64_t {
+  int64_t TheFraction;
+  int16_t BitsToShift;
+  int32_t MaxInput;
+  void Dump(Print* pPrint);
+};
+// fixedPointFraction is often a 6.10 number (check its BitsToShift)
+int8_t Multiply8ByFixedPointFraction16(int8_t factor, const FixedPointFraction16_t* pFixedPointFraction, Print* pPrintDebug = nullptr);
+// fixedPointFraction is often a 14.18 number (check its BitsToShift)
+int16_t Multiply16ByFixedPointFraction32(int16_t factor, const FixedPointFraction32_t* pFixedPointFraction, Print* pPrintDebug = nullptr);
+// fixedPointFraction is often a 30.34 number (check its BitsToShift)
+int32_t Multiply32ByFixedPointFraction64(int32_t factor, const FixedPointFraction64_t* pFixedPointFraction, Print* pPrintDebug = nullptr);
+// COMPROMISE until int128_t defined // fixedPointFraction is often a 30.34 number (check its BitsToShift)
+int64_t Multiply64ByFixedPointFraction64(int64_t factor, const FixedPointFraction64_t* pFixedPointFraction, Print* pPrintDebug = nullptr);
 
 // we need two fractions, depending on whether we're multiplying a +ve or -ve factor later
-void Ratio8ToFixedPointFraction88(int8_t numerator, int8_t denominator, int16_t* fixedPointFraction_Pos, int16_t* fixedPointFraction_Neg);
-void Ratio16ToFixedPointFraction1616(int16_t numerator, int16_t denominator, int32_t* fixedPointFraction_Pos, int32_t* fixedPointFraction_Neg);
-void Ratio32ToFixedPointFraction3232(int32_t numerator, int32_t denominator, int64_t* fixedPointFraction_Pos, int64_t* fixedPointFraction_Neg);
+void Ratio8ToFixedPointFraction16(int8_t numerator, int8_t denominator, FixedPointFraction16_t* poutFixedPointFraction_Pos, FixedPointFraction16_t* poutFixedPointFraction_Neg, Print* pPrintDebug = nullptr);
+void Ratio16ToFixedPointFraction32(int16_t numerator, int16_t denominator, FixedPointFraction32_t* poutFixedPointFraction_Pos, FixedPointFraction32_t* poutFixedPointFraction_Neg, Print* pPrintDebug = nullptr);
+void Ratio32ToFixedPointFraction64(int32_t numerator, int32_t denominator, FixedPointFraction64_t* poutFixedPointFraction_Pos, FixedPointFraction64_t* poutFixedPointFraction_Neg, Print* pPrintDebug = nullptr);
 // COMPROMISE until int128_t defined // Ratio64ToFixedPointFraction3232
-void Ratio64ToFixedPointFraction3232(int64_t numerator, int64_t denominator, int64_t* fixedPointFraction_Pos, int64_t* fixedPointFraction_Neg);
+void Ratio64ToFixedPointFraction64(int64_t numerator, int64_t denominator, FixedPointFraction64_t* poutFixedPointFraction_Pos, FixedPointFraction64_t* poutFixedPointFraction_Neg, Print* pPrintDebug = nullptr);
 
 // Calculate Greatest Common Denominator
 long CalcGCD(long A, long B);
@@ -78,98 +97,141 @@ long CalcGCD(long A, long B);
 class FastMapInt
 {
 public:
-    FastMapInt();
+    FastMapInt(Print* pPrintDebug = nullptr);
 
-    void init(const int in_min_incl, const int in_max_excl, const int out_min_incl, const int out_max_excl);
+    void init(const int in_min_incl, const int in_max_excl, const int out_min_incl, const int out_max_excl, Print* pPrintDebug = nullptr);
     int inline map (const int val, int* pCalcInfo = nullptr) {
       int calcInfo = 0;
       int inXS = val - _in_min_incl;
-      int absXS = abs(inXS);
       int ratioPart;
-      if(absXS == 0){
+      if(inXS == 0) {
         calcInfo |= 1;
         ratioPart = 0;
-      } else if(absXS < _d_FactorToMax8){
-        calcInfo |= 2;
-        ratioPart = Multiply8ByFixedPointFraction88(inXS, inXS >= 0 ? _fixedPoint88Fraction_Pos : _fixedPoint88Fraction_Neg);
-      } else if(absXS < _d_FactorToMax16){
-        calcInfo |= 4;
-        ratioPart = Multiply16ByFixedPointFraction1616(inXS, inXS >= 0 ? _fixedPoint1616Fraction_Pos : _fixedPoint1616Fraction_Neg);
-      } else if(absXS < _d_FactorToMax32){
-        calcInfo |= 8;
-        ratioPart = Multiply32ByFixedPointFraction3232(inXS, inXS >= 0 ? _fixedPoint3232Fraction_Pos : _fixedPoint3232Fraction_Neg);
-      } else {
-        calcInfo |= 32;
-        ratioPart = ((long)inXS * _d_out - (inXS >= 0 ? 0 : _d_in_less1)) / _d_in;
+      } else if(inXS > 0) {
+        if(inXS <= _fixedPoint16Fraction_Pos.MaxInput) {
+          calcInfo |= 2;
+          ratioPart = Multiply8ByFixedPointFraction16(inXS, &_fixedPoint16Fraction_Pos);
+        } else if(inXS <=_fixedPoint32Fraction_Pos.MaxInput) {
+          calcInfo |= 4;
+          ratioPart = Multiply16ByFixedPointFraction32(inXS, &_fixedPoint32Fraction_Pos);
+        } else if(inXS < _fixedPoint64Fraction_Pos.MaxInput) {
+          calcInfo |= 8;
+          ratioPart = Multiply32ByFixedPointFraction64(inXS, &_fixedPoint64Fraction_Pos);
+        } else {
+          calcInfo |= 32;
+          ratioPart = ((long)inXS * _d_out - (inXS >= 0 ? 0 : _d_in_less1)) / _d_in;
+        }
+      } else { // i.e. -ve
+        int absXS = -inXS;
+        if(absXS <= _fixedPoint16Fraction_Neg.MaxInput){
+          calcInfo |= 2;
+          ratioPart = Multiply8ByFixedPointFraction16(inXS, &_fixedPoint16Fraction_Neg);
+        } else if(absXS <= _fixedPoint32Fraction_Neg.MaxInput){
+          calcInfo |= 4;
+          ratioPart = Multiply16ByFixedPointFraction32(inXS, &_fixedPoint32Fraction_Neg);
+        } else if(absXS <= _fixedPoint64Fraction_Neg.MaxInput){
+          calcInfo |= 8;
+          ratioPart = Multiply32ByFixedPointFraction64(inXS, &_fixedPoint64Fraction_Neg);
+        } else {
+          calcInfo |= 32;
+          ratioPart = ((long)inXS * _d_out - (inXS >= 0 ? 0 : _d_in_less1)) / _d_in;
+        }
       }
-//Serial.print("cI=");Serial.print(calcInfo, DEC);Serial.print(", rP=");Serial.println(ratioPart, DEC);
+#if 0
+Serial.print("cI=");Serial.print(calcInfo, DEC);Serial.print(", rP=");Serial.println(ratioPart, DEC);
+#endif
 
       if(pCalcInfo) { *pCalcInfo = calcInfo; } // pass back calc info, if wanted
       return ( _out_min_incl + ratioPart);
     }
+
     int inline back (const int val) {
       int outXS = val - _out_min_incl;
       return ( _in_min_incl + ((long)outXS * _d_in - (outXS >= 0 ? 0 : _d_out_less1) ) / _d_out);
     }
+
     int constrainedMap(const int val);
     int lowerConstrainedMap(const int val);
     int upperConstrainedMap(const int val);
+
+    void Dump(Print* pPrint);
 private:
     int _in_min_incl, _in_max_excl, _out_min_incl, _out_max_excl;
     int _d_in, _d_out, _d_GCF;
     int _d_in_less1, _d_out_less1;
-    int _d_FactorToMax8, _d_FactorToMax16, _d_FactorToMax32; // used to see if we can reduce size of calculaton
-    int16_t _fixedPoint88Fraction_Pos, _fixedPoint88Fraction_Neg;
-    int32_t _fixedPoint1616Fraction_Pos, _fixedPoint1616Fraction_Neg;
-    int64_t _fixedPoint3232Fraction_Pos, _fixedPoint3232Fraction_Neg;
+    FixedPointFraction16_t _fixedPoint16Fraction_Pos, _fixedPoint16Fraction_Neg;
+    FixedPointFraction32_t _fixedPoint32Fraction_Pos, _fixedPoint32Fraction_Neg;
+    FixedPointFraction64_t _fixedPoint64Fraction_Pos, _fixedPoint64Fraction_Neg;
 };
 
 class FastMapLong
 {
 public:
-    FastMapLong();
+    FastMapLong(Print* pPrintDebug = nullptr);
 
-    void init(const long in_min_incl, const long in_max_excl, const long out_min_incl, const long out_max_excl);
+    void init(const long in_min_incl, const long in_max_excl, const long out_min_incl, const long out_max_excl, Print* pPrintDebug = nullptr);
+
     long inline map (const long val, int* pCalcInfo = nullptr) {
-      long calcInfo = 0;
+      int calcInfo = 0;
       long inXS = val - _in_min_incl;
-      long absXS = abs(inXS);
       long ratioPart;
-      if(absXS == 0){
+      if(inXS == 0) {
         calcInfo |= 1;
         ratioPart = 0;
-      } else if(absXS < _d_FactorToMax8){
-        calcInfo |= 2;
-        ratioPart = Multiply8ByFixedPointFraction88(inXS, inXS >= 0 ? _fixedPoint88Fraction_Pos : _fixedPoint88Fraction_Neg);
-      } else if(absXS < _d_FactorToMax16){
-        calcInfo |= 4;
-        ratioPart = Multiply16ByFixedPointFraction1616(inXS, inXS >= 0 ? _fixedPoint1616Fraction_Pos : _fixedPoint1616Fraction_Neg);
-      } else if(absXS < _d_FactorToMax32){
-        calcInfo |= 8;
-        ratioPart = Multiply32ByFixedPointFraction3232(inXS, inXS >= 0 ? _fixedPoint3232Fraction_Pos : _fixedPoint3232Fraction_Neg);
-      } else {
-        calcInfo |= 32;
-        ratioPart = ((long long)inXS * _d_out - (inXS >= 0 ? 0 : _d_in_less1)) / _d_in;
+      } else if(inXS > 0) {
+        if(inXS <= _fixedPoint16Fraction_Pos.MaxInput) {
+          calcInfo |= 2;
+          ratioPart = Multiply8ByFixedPointFraction16(inXS, &_fixedPoint16Fraction_Pos);
+        } else if(inXS <=_fixedPoint32Fraction_Pos.MaxInput) {
+          calcInfo |= 4;
+          ratioPart = Multiply16ByFixedPointFraction32(inXS, &_fixedPoint32Fraction_Pos);
+        } else if(inXS < _fixedPoint64Fraction_Pos.MaxInput) {
+          calcInfo |= 8;
+          ratioPart = Multiply32ByFixedPointFraction64(inXS, &_fixedPoint64Fraction_Pos);
+        } else {
+          calcInfo |= 32;
+          ratioPart = ((long long)inXS * _d_out - (inXS >= 0 ? 0 : _d_in_less1)) / _d_in;
+        }
+      } else { // i.e. -ve
+        int absXS = -inXS;
+        if(absXS <= _fixedPoint16Fraction_Neg.MaxInput){
+          calcInfo |= 2;
+          ratioPart = Multiply8ByFixedPointFraction16(inXS, &_fixedPoint16Fraction_Neg);
+        } else if(absXS <= _fixedPoint32Fraction_Neg.MaxInput){
+          calcInfo |= 4;
+          ratioPart = Multiply16ByFixedPointFraction32(inXS, &_fixedPoint32Fraction_Neg);
+        } else if(absXS <= _fixedPoint64Fraction_Neg.MaxInput){
+          calcInfo |= 8;
+          ratioPart = Multiply32ByFixedPointFraction64(inXS, &_fixedPoint64Fraction_Neg);
+        } else {
+          calcInfo |= 32;
+          ratioPart = ((long long)inXS * _d_out - (inXS >= 0 ? 0 : _d_in_less1)) / _d_in;
+        }
       }
-//Serial.print("cI=");Serial.print(calcInfo, DEC);Serial.print(", rP=");Serial.println(ratioPart, DEC);
+#if 0
+Serial.print("cI=");Serial.print(calcInfo, DEC);Serial.print(", rP=");Serial.println(ratioPart, DEC);
+#endif
 
       if(pCalcInfo) { *pCalcInfo = calcInfo; } // pass back calc info, if wanted
       return ( _out_min_incl + ratioPart);
     }
+
     long inline back (const long val) {
       long outXS = val - _out_min_incl;
       return ( _in_min_incl + ((long long)outXS * _d_in - (outXS >= 0 ? 0 : _d_out_less1) ) / _d_out);
     }
+
     long constrainedMap(const long val);
     long lowerConstrainedMap(const long val);
     long upperConstrainedMap(const long val);
+
+    void Dump(Print* pPrint);
 private:
     long _in_min_incl, _in_max_excl, _out_min_incl, _out_max_excl;
     long _d_in, _d_out, _d_GCF;
     long _d_in_less1, _d_out_less1;
-    long _d_FactorToMax8, _d_FactorToMax16, _d_FactorToMax32; // used to see if we can reduce size of calculaton
-    int16_t _fixedPoint88Fraction_Pos, _fixedPoint88Fraction_Neg;
-    int32_t _fixedPoint1616Fraction_Pos, _fixedPoint1616Fraction_Neg;
-    int64_t _fixedPoint3232Fraction_Pos, _fixedPoint3232Fraction_Neg;
+    FixedPointFraction16_t _fixedPoint16Fraction_Pos, _fixedPoint16Fraction_Neg;
+    FixedPointFraction32_t _fixedPoint32Fraction_Pos, _fixedPoint32Fraction_Neg;
+    FixedPointFraction64_t _fixedPoint64Fraction_Pos, _fixedPoint64Fraction_Neg;
 };
 // -- END OF FILE --
