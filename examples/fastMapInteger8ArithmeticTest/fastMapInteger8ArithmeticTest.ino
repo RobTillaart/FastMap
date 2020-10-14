@@ -39,7 +39,7 @@ test(T9130FastMapInt_F2C_M40To212) {
 test(T1136Multiply8ByFixedPointFraction16_5DivM9_Neg) {
   FixedPointFraction16_t FPF;
   Ratio8ToFixedPointFraction16(5, -9, nullptr, &FPF);
-  assertEqual(FPF.MaxInput, 57);
+  assertEqual(FPF.MaxInput, 57 * 2);
   assertEqual(Multiply8ByFixedPointFraction16(0, &FPF), 0);
 
   assertEqual(Multiply8ByFixedPointFraction16(-1, &FPF), 1);
@@ -117,7 +117,7 @@ test(T1135Multiply8ByFixedPointFraction16_5DivM9_Pos) {
 test(T1131Multiply8ByFixedPointFraction16_5Div9_Neg) {
   FixedPointFraction16_t FPF;
   Ratio8ToFixedPointFraction16(5, 9, nullptr, &FPF);
-  assertEqual(FPF.MaxInput, 57);
+  assertEqual(FPF.MaxInput, 57 * 2);
   assertEqual(Multiply8ByFixedPointFraction16(0, &FPF), 0);
 
   assertEqual(Multiply8ByFixedPointFraction16(-1, &FPF), -1);
@@ -194,7 +194,7 @@ test(T1130Multiply8ByFixedPointFraction16_5Div9_Pos) {
 test(T1126Multiply8ByFixedPointFraction16_1DivM3_Neg) {
   FixedPointFraction16_t FPF;
   Ratio8ToFixedPointFraction16(1, -3, nullptr, &FPF);
-  assertEqual(FPF.MaxInput, 47);
+  assertEqual(FPF.MaxInput, 47 * 2);
   assertEqual(Multiply8ByFixedPointFraction16(0, &FPF), 0);
 
   assertEqual(Multiply8ByFixedPointFraction16(-1, &FPF), 1);
@@ -207,8 +207,10 @@ test(T1126Multiply8ByFixedPointFraction16_1DivM3_Neg) {
   assertEqual(Multiply8ByFixedPointFraction16(-8, &FPF), 3);
   assertEqual(Multiply8ByFixedPointFraction16(-9, &FPF), 3);
 
-  assertEqual(Multiply8ByFixedPointFraction16(-10, &FPF), 4);
-  assertEqual(Multiply8ByFixedPointFraction16(-47, &FPF), 16);
+  for(int ix = 0; ix <= FPF.MaxInput; ++ix){
+    int exp = ((ix + 2) / 3);
+    assertEqual(Multiply8ByFixedPointFraction16(-ix, &FPF), exp);
+  }
 }
 test(T1125Multiply8ByFixedPointFraction16_1DivM3_Pos) {
   FixedPointFraction16_t FPF;
@@ -226,13 +228,15 @@ test(T1125Multiply8ByFixedPointFraction16_1DivM3_Pos) {
   assertEqual(Multiply8ByFixedPointFraction16(8, &FPF), -2);
   assertEqual(Multiply8ByFixedPointFraction16(9, &FPF), -3);
 
-  assertEqual(Multiply8ByFixedPointFraction16(10, &FPF), -3);
-  assertEqual(Multiply8ByFixedPointFraction16(47, &FPF), -15);
+  for(int ix = 0; ix <= FPF.MaxInput; ++ix){
+    int exp = -((ix + 0) / 3);
+    assertEqual(Multiply8ByFixedPointFraction16(ix, &FPF), exp);
+  }
 }
 test(T1121Multiply8ByFixedPointFraction16_1Div3_Neg) {
   FixedPointFraction16_t FPF;
   Ratio8ToFixedPointFraction16(1, 3, nullptr, &FPF);
-  assertEqual(FPF.MaxInput, 47);
+  assertEqual(FPF.MaxInput, 47 * 2);
   assertEqual(Multiply8ByFixedPointFraction16(0, &FPF), 0);
 
   assertEqual(Multiply8ByFixedPointFraction16(-1, &FPF), -1);
@@ -245,8 +249,10 @@ test(T1121Multiply8ByFixedPointFraction16_1Div3_Neg) {
   assertEqual(Multiply8ByFixedPointFraction16(-8, &FPF), -3);
   assertEqual(Multiply8ByFixedPointFraction16(-9, &FPF), -3);
 
-  assertEqual(Multiply8ByFixedPointFraction16(-10, &FPF), -4);
-  assertEqual(Multiply8ByFixedPointFraction16(-47, &FPF), -16);
+  for(int ix = 0; ix <= FPF.MaxInput; ++ix){
+    int exp = -((ix + 2) / 3);
+    assertEqual(Multiply8ByFixedPointFraction16(-ix, &FPF), exp);
+  }
 }
 test(T1120Multiply8ByFixedPointFraction16_1Div3_Pos) {
 #if FULL_DEBUG
@@ -269,14 +275,16 @@ test(T1120Multiply8ByFixedPointFraction16_1Div3_Pos) {
   assertEqual(Multiply8ByFixedPointFraction16(8, &FPF), 2);
   assertEqual(Multiply8ByFixedPointFraction16(9, &FPF), 3);
 
-  assertEqual(Multiply8ByFixedPointFraction16(10, &FPF), 3);
-  assertEqual(Multiply8ByFixedPointFraction16(47, &FPF), 15);
+  for(int ix = 0; ix <= FPF.MaxInput; ++ix){
+    int exp = ((ix + 0) / 3);
+    assertEqual(Multiply8ByFixedPointFraction16(ix, &FPF), exp);
+  }
 }
 
 test(T1116Multiply8ByFixedPointFraction16_1DivM4_Neg) {
   FixedPointFraction16_t FPF;
   Ratio8ToFixedPointFraction16(1, -4, nullptr, &FPF);
-  assertEqual(FPF.MaxInput, 63);
+  assertEqual(FPF.MaxInput, 63 * 2);
   assertEqual(Multiply8ByFixedPointFraction16(0, &FPF), 0);
 
   assertEqual(Multiply8ByFixedPointFraction16(-1, &FPF), 1);
@@ -289,13 +297,15 @@ test(T1116Multiply8ByFixedPointFraction16_1DivM4_Neg) {
   assertEqual(Multiply8ByFixedPointFraction16(-8, &FPF), 2);
   assertEqual(Multiply8ByFixedPointFraction16(-9, &FPF), 3);
 
-  assertEqual(Multiply8ByFixedPointFraction16(-10, &FPF), 3);
-  assertEqual(Multiply8ByFixedPointFraction16(-63, &FPF), 16);
+  for(int ix = 0; ix <= FPF.MaxInput; ++ix){
+    int exp = ((ix + 3) / 4);
+    assertEqual(Multiply8ByFixedPointFraction16(-ix, &FPF), exp);
+  }
 }
 test(T1115Multiply8ByFixedPointFraction16_1DivM4_Pos) {
   FixedPointFraction16_t FPF;
   Ratio8ToFixedPointFraction16(1, -4, &FPF, nullptr);
-  assertEqual(FPF.MaxInput, 63);
+  assertEqual(FPF.MaxInput, 63 * 2);
   assertEqual(Multiply8ByFixedPointFraction16(0, &FPF), 0);
 
   assertEqual(Multiply8ByFixedPointFraction16(1, &FPF), 0);
@@ -308,13 +318,15 @@ test(T1115Multiply8ByFixedPointFraction16_1DivM4_Pos) {
   assertEqual(Multiply8ByFixedPointFraction16(8, &FPF), -2);
   assertEqual(Multiply8ByFixedPointFraction16(9, &FPF), -2);
 
-  assertEqual(Multiply8ByFixedPointFraction16(10, &FPF), -2);
-  assertEqual(Multiply8ByFixedPointFraction16(63, &FPF), -15);
+  for(int ix = 0; ix <= FPF.MaxInput; ++ix){
+    int exp = -((ix + 0) / 4);
+    assertEqual(Multiply8ByFixedPointFraction16(ix, &FPF), exp);
+  }
 }
 test(T1111Multiply8ByFixedPointFraction16_1Div4_Neg) {
   FixedPointFraction16_t FPF;
   Ratio8ToFixedPointFraction16(1, 4, nullptr, &FPF);
-  assertEqual(FPF.MaxInput, 63);
+  assertEqual(FPF.MaxInput, 63 * 2);
   assertEqual(Multiply8ByFixedPointFraction16(0, &FPF), 0);
 
   assertEqual(Multiply8ByFixedPointFraction16(-1, &FPF), -1);
@@ -327,13 +339,15 @@ test(T1111Multiply8ByFixedPointFraction16_1Div4_Neg) {
   assertEqual(Multiply8ByFixedPointFraction16(-8, &FPF), -2);
   assertEqual(Multiply8ByFixedPointFraction16(-9, &FPF), -3);
 
-  assertEqual(Multiply8ByFixedPointFraction16(-10, &FPF), -3);
-  assertEqual(Multiply8ByFixedPointFraction16(-63, &FPF), -16);
+  for(int ix = 0; ix <= FPF.MaxInput; ++ix){
+    int exp = -((ix + 3) / 4);
+    assertEqual(Multiply8ByFixedPointFraction16(-ix, &FPF), exp);
+  }
 }
 test(T1110Multiply8ByFixedPointFraction16_1Div4_Pos) {
   FixedPointFraction16_t FPF;
   Ratio8ToFixedPointFraction16(1, 4, &FPF, nullptr);
-  assertEqual(FPF.MaxInput, 63);
+  assertEqual(FPF.MaxInput, 63 * 2);
   assertEqual(Multiply8ByFixedPointFraction16(0, &FPF), 0);
 
   assertEqual(Multiply8ByFixedPointFraction16(1, &FPF), 0);
@@ -346,8 +360,10 @@ test(T1110Multiply8ByFixedPointFraction16_1Div4_Pos) {
   assertEqual(Multiply8ByFixedPointFraction16(8, &FPF), 2);
   assertEqual(Multiply8ByFixedPointFraction16(9, &FPF), 2);
 
-  assertEqual(Multiply8ByFixedPointFraction16(10, &FPF), 2);
-  assertEqual(Multiply8ByFixedPointFraction16(63, &FPF), 15);
+  for(int ix = 0; ix <= FPF.MaxInput; ++ix){
+    int exp = ((ix + 0) / 4);
+    assertEqual(Multiply8ByFixedPointFraction16(ix, &FPF), exp);
+  }
 }
 
 test(T1100Ratio8ToFixedPointFraction16) {
@@ -397,305 +413,305 @@ test(T1100Ratio8ToFixedPointFraction16) {
   // equal ratios
   Ratio8ToFixedPointFraction16(1, 1, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x100 + 0B00000000);
-  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x100 + 0B00000000);
-  assertEqual(fpfP.BitsToShift, 8 + 1);
-  assertEqual(fpfN.BitsToShift, 8 + 1);
-  assertEqual(fpfP.MaxInput, 63);
-  assertEqual(fpfN.MaxInput, 63);
+  assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x80 + 0B00000000);
+  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x80 + 0B00000000);
+  assertEqual(fpfP.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfN.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfP.MaxInput, 63 * 2);
+  assertEqual(fpfN.MaxInput, 63 * 2);
 
   Ratio8ToFixedPointFraction16(12, 12, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x100 + 0B00000000);
-  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x100 + 0B00000000);
-  assertEqual(fpfP.BitsToShift, 8 + 1);
-  assertEqual(fpfN.BitsToShift, 8 + 1);
-  assertEqual(fpfP.MaxInput, 63);
-  assertEqual(fpfN.MaxInput, 63);
+  assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x80 + 0B00000000);
+  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x80 + 0B00000000);
+  assertEqual(fpfP.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfN.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfP.MaxInput, 63 * 2);
+  assertEqual(fpfN.MaxInput, 63 * 2);
 
   Ratio8ToFixedPointFraction16(-2, 2, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, -((int16_t)0b10 * 0x100 + 0B00000000));
-  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x100 + 0B00000000));
-  assertEqual(fpfP.BitsToShift, 8 + 1);
-  assertEqual(fpfN.BitsToShift, 8 + 1);
-  assertEqual(fpfP.MaxInput, 63);
-  assertEqual(fpfN.MaxInput, 63);
+  assertEqual(fpfP.TheFraction, -((int16_t)0b10 * 0x80 + 0B00000000));
+  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x80 + 0B00000000));
+  assertEqual(fpfP.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfN.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfP.MaxInput, 63 * 2);
+  assertEqual(fpfN.MaxInput, 63 * 2);
 
   Ratio8ToFixedPointFraction16(3, -3, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, -((int16_t)0b10 * 0x100 + 0B00000000));
-  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x100 + 0B00000000));
-  assertEqual(fpfP.BitsToShift, 8 + 1);
-  assertEqual(fpfN.BitsToShift, 8 + 1);
-  assertEqual(fpfP.MaxInput, 63);
-  assertEqual(fpfN.MaxInput, 63);
+  assertEqual(fpfP.TheFraction, -((int16_t)0b10 * 0x80 + 0B00000000));
+  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x80 + 0B00000000));
+  assertEqual(fpfP.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfN.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfP.MaxInput, 63 * 2);
+  assertEqual(fpfN.MaxInput, 63 * 2);
 
   Ratio8ToFixedPointFraction16(-4, -4, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x100 + 0B00000000);
-  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x100 + 0B00000000);
-  assertEqual(fpfP.BitsToShift, 8 + 1);
-  assertEqual(fpfN.BitsToShift, 8 + 1);
-  assertEqual(fpfP.MaxInput, 63);
-  assertEqual(fpfN.MaxInput, 63);
+  assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x80 + 0B00000000);
+  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x80 + 0B00000000);
+  assertEqual(fpfP.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfN.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfP.MaxInput, 63 * 2);
+  assertEqual(fpfN.MaxInput, 63 * 2);
 
   // exact ratios
   Ratio8ToFixedPointFraction16(8, 2, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x100 + 0B00000000);
-  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x100 + 0B00000000);
-  assertEqual(fpfP.BitsToShift, 8 - 1);
-  assertEqual(fpfN.BitsToShift, 8 - 1);
-  assertEqual(fpfP.MaxInput, 31);
-  assertEqual(fpfN.MaxInput, 31);
+  assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x40 + 0B00000000);
+  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x40 + 0B00000000);
+  assertEqual(fpfP.BitsToShift, 8 - 1 - 2);
+  assertEqual(fpfN.BitsToShift, 8 - 1 - 2);
+  assertEqual(fpfP.MaxInput, 31 * 4);
+  assertEqual(fpfN.MaxInput, 31 * 4);
 
   Ratio8ToFixedPointFraction16(-12, 4, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, -((int16_t)0b11 * 0x100 + 0B00000000));
-  assertEqual(fpfN.TheFraction, -((int16_t)0b11 * 0x100 + 0B00000000));
-  assertEqual(fpfP.BitsToShift, 8 - 0);
-  assertEqual(fpfN.BitsToShift, 8 - 0);
-  assertEqual(fpfP.MaxInput, 42);
-  assertEqual(fpfN.MaxInput, 42);
+  assertEqual(fpfP.TheFraction, -((int16_t)0b11 * 0x80 + 0B00000000));
+  assertEqual(fpfN.TheFraction, -((int16_t)0b11 * 0x80 + 0B00000000));
+  assertEqual(fpfP.BitsToShift, 8 - 0 - 1);
+  assertEqual(fpfN.BitsToShift, 8 - 0 - 1);
+  assertEqual(fpfP.MaxInput, 42 * 2);
+  assertEqual(fpfN.MaxInput, 42 * 2);
 
   Ratio8ToFixedPointFraction16(30, -5, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, -((int16_t)0b11 * 0x100 + 0B00000000));
-  assertEqual(fpfN.TheFraction, -((int16_t)0b11 * 0x100 + 0B00000000));
-  assertEqual(fpfP.BitsToShift, 8 - 1);
-  assertEqual(fpfN.BitsToShift, 8 - 1);
-  assertEqual(fpfP.MaxInput, 21);
-  assertEqual(fpfN.MaxInput, 21);
+  assertEqual(fpfP.TheFraction, -((int16_t)0b11 * 0x40 + 0B00000000));
+  assertEqual(fpfN.TheFraction, -((int16_t)0b11 * 0x40 + 0B00000000));
+  assertEqual(fpfP.BitsToShift, 8 - 1 - 2);
+  assertEqual(fpfN.BitsToShift, 8 - 1 - 2);
+  assertEqual(fpfP.MaxInput, 21 * 4);
+  assertEqual(fpfN.MaxInput, 21 * 4);
 
   Ratio8ToFixedPointFraction16(-56, -7, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x100 + 0B00000000);
-  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x100 + 0B00000000);
-  assertEqual(fpfP.BitsToShift, 8 - 2);
-  assertEqual(fpfN.BitsToShift, 8 - 2);
-  assertEqual(fpfP.MaxInput, 15);
-  assertEqual(fpfN.MaxInput, 15);
+  assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x20 + 0B00000000);
+  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x20 + 0B00000000);
+  assertEqual(fpfP.BitsToShift, 8 - 2 - 3);
+  assertEqual(fpfN.BitsToShift, 8 - 2 - 3);
+  assertEqual(fpfP.MaxInput, 15 * 8);
+  assertEqual(fpfN.MaxInput, 15 * 8);
 
   // theoretical exact ratios
   Ratio8ToFixedPointFraction16(1, 3, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
   assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x100 + 0B10101011);
-  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x100 + 0B10101010);
+  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x80 + 0B1010101);
   assertEqual(fpfP.BitsToShift, 8 + 3);
-  assertEqual(fpfN.BitsToShift, 8 + 3);
+  assertEqual(fpfN.BitsToShift, 8 + 3 - 1);
   assertEqual(fpfP.MaxInput, 47);
-  assertEqual(fpfN.MaxInput, 47);
+  assertEqual(fpfN.MaxInput, 47 * 2);
 
   Ratio8ToFixedPointFraction16(-1, 3, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
   assertEqual(fpfP.TheFraction, -((int16_t)0b10 * 0x100 + 0B10101011));
-  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x100 + 0B10101010));
+  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x80 + 0B1010101));
   assertEqual(fpfP.BitsToShift, 8 + 3);
-  assertEqual(fpfN.BitsToShift, 8 + 3);
+  assertEqual(fpfN.BitsToShift, 8 + 3 -1);
   assertEqual(fpfP.MaxInput, 47);
-  assertEqual(fpfN.MaxInput, 47);
+  assertEqual(fpfN.MaxInput, 47 * 2);
 
   Ratio8ToFixedPointFraction16(1, -3, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
   assertEqual(fpfP.TheFraction, -((int16_t)0b10 * 0x100 + 0B10101011));
-  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x100 + 0B10101010));
+  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x80 + 0B1010101));
   assertEqual(fpfP.BitsToShift, 8 + 3);
-  assertEqual(fpfN.BitsToShift, 8 + 3);
+  assertEqual(fpfN.BitsToShift, 8 + 3 - 1);
   assertEqual(fpfP.MaxInput, 47);
-  assertEqual(fpfN.MaxInput, 47);
+  assertEqual(fpfN.MaxInput, 47 * 2);
 
   Ratio8ToFixedPointFraction16(-1, -3, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
   assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x100 + 0B10101011);
-  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x100 + 0B10101010);
+  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x80 + 0B1010101);
   assertEqual(fpfP.BitsToShift, 8 + 3);
-  assertEqual(fpfN.BitsToShift, 8 + 3);
+  assertEqual(fpfN.BitsToShift, 8 + 3 - 1);
   assertEqual(fpfP.MaxInput, 47);
-  assertEqual(fpfN.MaxInput, 47);
+  assertEqual(fpfN.MaxInput, 47 * 2);
 
   Ratio8ToFixedPointFraction16(2, 3, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
   assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x100 + 0B10101011);
-  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x100 + 0B10101010);
+  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x80 + 0B1010101);
   assertEqual(fpfP.BitsToShift, 8 + 2);
-  assertEqual(fpfN.BitsToShift, 8 + 2);
+  assertEqual(fpfN.BitsToShift, 8 + 2 - 1);
   assertEqual(fpfP.MaxInput, 47);
-  assertEqual(fpfN.MaxInput, 47);
+  assertEqual(fpfN.MaxInput, 47 * 2);
 
   Ratio8ToFixedPointFraction16(-2, 3, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
   assertEqual(fpfP.TheFraction, -((int16_t)0b10 * 0x100 + 0B10101011));
-  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x100 + 0B10101010));
+  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x80 + 0B1010101));
   assertEqual(fpfP.BitsToShift, 8 + 2);
-  assertEqual(fpfN.BitsToShift, 8 + 2);
+  assertEqual(fpfN.BitsToShift, 8 + 2 - 1);
   assertEqual(fpfP.MaxInput, 47);
-  assertEqual(fpfN.MaxInput, 47);
+  assertEqual(fpfN.MaxInput, 47 * 2);
 
   Ratio8ToFixedPointFraction16(2, -3, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
   assertEqual(fpfP.TheFraction, -((int16_t)0b10 * 0x100 + 0B10101011));
-  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x100 + 0B10101010));
+  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x80 + 0B1010101));
   assertEqual(fpfP.BitsToShift, 8 + 2);
-  assertEqual(fpfN.BitsToShift, 8 + 2);
+  assertEqual(fpfN.BitsToShift, 8 + 2 - 1);
   assertEqual(fpfP.MaxInput, 47);
-  assertEqual(fpfN.MaxInput, 47);
+  assertEqual(fpfN.MaxInput, 47 * 2);
 
   Ratio8ToFixedPointFraction16(-2, -3, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
   assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x100 + 0B10101011);
-  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x100 + 0B10101010);
+  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x80 + 0B1010101);
   assertEqual(fpfP.BitsToShift, 8 + 2);
-  assertEqual(fpfN.BitsToShift, 8 + 2);
+  assertEqual(fpfN.BitsToShift, 8 + 2 - 1);
   assertEqual(fpfP.MaxInput, 47);
-  assertEqual(fpfN.MaxInput, 47);
+  assertEqual(fpfN.MaxInput, 47 * 2);
 
   // binary fraction
   Ratio8ToFixedPointFraction16(1, 2, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x100 + 0B00000000);
-  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x100 + 0B00000000);
-  assertEqual(fpfP.BitsToShift, 8 + 2);
-  assertEqual(fpfN.BitsToShift, 8 + 2);
-  assertEqual(fpfP.MaxInput, 63);
-  assertEqual(fpfN.MaxInput, 63);
+  assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x80 + 0B00000000);
+  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x80 + 0B00000000);
+  assertEqual(fpfP.BitsToShift, 8 + 2 - 1);
+  assertEqual(fpfN.BitsToShift, 8 + 2 - 1);
+  assertEqual(fpfP.MaxInput, 63 * 2);
+  assertEqual(fpfN.MaxInput, 63 * 2);
 
   Ratio8ToFixedPointFraction16(-3, 4, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, -((int16_t)0b11 * 0x100 + 0B00000000));
-  assertEqual(fpfN.TheFraction, -((int16_t)0b11 * 0x100 + 0B00000000));
-  assertEqual(fpfP.BitsToShift, 8 + 2);
-  assertEqual(fpfN.BitsToShift, 8 + 2);
-  assertEqual(fpfP.MaxInput, 42);
-  assertEqual(fpfN.MaxInput, 42);
+  assertEqual(fpfP.TheFraction, -((int16_t)0b11 * 0x80 + 0B00000000));
+  assertEqual(fpfN.TheFraction, -((int16_t)0b11 * 0x80 + 0B00000000));
+  assertEqual(fpfP.BitsToShift, 8 + 2 - 1);
+  assertEqual(fpfN.BitsToShift, 8 + 2 - 1);
+  assertEqual(fpfP.MaxInput, 42 * 2);
+  assertEqual(fpfN.MaxInput, 42 * 2);
 
   Ratio8ToFixedPointFraction16(3, -8, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, -((int16_t)0b11 * 0x100 + 0B00000000));
-  assertEqual(fpfN.TheFraction, -((int16_t)0b11 * 0x100 + 0B00000000));
-  assertEqual(fpfP.BitsToShift, 8 + 3);
-  assertEqual(fpfN.BitsToShift, 8 + 3);
-  assertEqual(fpfP.MaxInput, 42);
-  assertEqual(fpfN.MaxInput, 42);
+  assertEqual(fpfP.TheFraction, -((int16_t)0b11 * 0x80 + 0B00000000));
+  assertEqual(fpfN.TheFraction, -((int16_t)0b11 * 0x80 + 0B00000000));
+  assertEqual(fpfP.BitsToShift, 8 + 3 - 1);
+  assertEqual(fpfN.BitsToShift, 8 + 3 - 1);
+  assertEqual(fpfP.MaxInput, 42 * 2);
+  assertEqual(fpfN.MaxInput, 42 * 2);
 
   Ratio8ToFixedPointFraction16(-3, -16, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, (int16_t)0b11 * 0x100 + 0B00000000);
-  assertEqual(fpfN.TheFraction, (int16_t)0b11 * 0x100 + 0B00000000);
-  assertEqual(fpfP.BitsToShift, 8 + 4);
-  assertEqual(fpfN.BitsToShift, 8 + 4);
-  assertEqual(fpfP.MaxInput, 42);
-  assertEqual(fpfN.MaxInput, 42);
+  assertEqual(fpfP.TheFraction, (int16_t)0b11 * 0x80 + 0B00000000);
+  assertEqual(fpfN.TheFraction, (int16_t)0b11 * 0x80 + 0B00000000);
+  assertEqual(fpfP.BitsToShift, 8 + 4 - 1);
+  assertEqual(fpfN.BitsToShift, 8 + 4 - 1);
+  assertEqual(fpfP.MaxInput, 42 * 2);
+  assertEqual(fpfN.MaxInput, 42 * 2);
 
   // binary vulgar fraction
   Ratio8ToFixedPointFraction16(3, 2, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, (int16_t)0b11 * 0x100 + 0B00000000);
-  assertEqual(fpfN.TheFraction, (int16_t)0b11 * 0x100 + 0B00000000);
-  assertEqual(fpfP.BitsToShift, 8 + 1);
-  assertEqual(fpfN.BitsToShift, 8 + 1);
-  assertEqual(fpfP.MaxInput, 42);
-  assertEqual(fpfN.MaxInput, 42);
+  assertEqual(fpfP.TheFraction, (int16_t)0b11 * 0x80 + 0B00000000);
+  assertEqual(fpfN.TheFraction, (int16_t)0b11 * 0x80 + 0B00000000);
+  assertEqual(fpfP.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfN.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfP.MaxInput, 42 * 2);
+  assertEqual(fpfN.MaxInput, 42 * 2);
 
   Ratio8ToFixedPointFraction16(-7, 4, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, -((int16_t)0b11 * 0x100 + 0B10000000));
-  assertEqual(fpfN.TheFraction, -((int16_t)0b11 * 0x100 + 0B10000000));
-  assertEqual(fpfP.BitsToShift, 8 + 1);
-  assertEqual(fpfN.BitsToShift, 8 + 1);
-  assertEqual(fpfP.MaxInput, 36);
-  assertEqual(fpfN.MaxInput, 36);
+  assertEqual(fpfP.TheFraction, -((int16_t)0b11 * 0x80 + 0B1000000));
+  assertEqual(fpfN.TheFraction, -((int16_t)0b11 * 0x80 + 0B1000000));
+  assertEqual(fpfP.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfN.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfP.MaxInput, 36 * 2);
+  assertEqual(fpfN.MaxInput, 36 * 2);
 
   Ratio8ToFixedPointFraction16(11, -8, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, -((int16_t)0b10 * 0x100 + 0B11000000));
-  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x100 + 0B11000000));
-  assertEqual(fpfP.BitsToShift, 8 + 1);
-  assertEqual(fpfN.BitsToShift, 8 + 1);
-  assertEqual(fpfP.MaxInput, 46);
-  assertEqual(fpfN.MaxInput, 46);
+  assertEqual(fpfP.TheFraction, -((int16_t)0b10 * 0x80 + 0B1100000));
+  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x80 + 0B1100000));
+  assertEqual(fpfP.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfN.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfP.MaxInput, 46 * 2);
+  assertEqual(fpfN.MaxInput, 46 * 2);
 
   Ratio8ToFixedPointFraction16(-19, -16, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x100 + 0B01100000);
-  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x100 + 0B01100000);
-  assertEqual(fpfP.BitsToShift, 8 + 1);
-  assertEqual(fpfN.BitsToShift, 8 + 1);
-  assertEqual(fpfP.MaxInput, 53);
-  assertEqual(fpfN.MaxInput, 53);
+  assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x80 + 0B0110000);
+  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x80 + 0B0110000);
+  assertEqual(fpfP.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfN.BitsToShift, 8 + 1 - 1);
+  assertEqual(fpfP.MaxInput, 53 * 2);
+  assertEqual(fpfN.MaxInput, 53 * 2);
 
   // inexact fraction
   Ratio8ToFixedPointFraction16(5, 9, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
   assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x100 + 0B00111001);
-  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x100 + 0B00111000);
+  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x80 + 0B0011100);
   assertEqual(fpfP.BitsToShift, 8 + 2);
-  assertEqual(fpfN.BitsToShift, 8 + 2);
+  assertEqual(fpfN.BitsToShift, 8 + 2 - 1);
   assertEqual(fpfP.MaxInput, 57);
-  assertEqual(fpfN.MaxInput, 57);
+  assertEqual(fpfN.MaxInput, 57 * 2);
 
   Ratio8ToFixedPointFraction16(-5, 9, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
   assertEqual(fpfP.TheFraction, -((int16_t)0b10 * 0x100 + 0B00111001));
-  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x100 + 0B00111000));
+  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x80 + 0B0011100));
   assertEqual(fpfP.BitsToShift, 8 + 2);
-  assertEqual(fpfN.BitsToShift, 8 + 2);
+  assertEqual(fpfN.BitsToShift, 8 + 2 - 1);
   assertEqual(fpfP.MaxInput, 57);
-  assertEqual(fpfN.MaxInput, 57);
+  assertEqual(fpfN.MaxInput, 57 * 2);
 
   Ratio8ToFixedPointFraction16(5, -9, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
   assertEqual(fpfP.TheFraction, -((int16_t)0b10 * 0x100 + 0B00111001));
-  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x100 + 0B00111000));
+  assertEqual(fpfN.TheFraction, -((int16_t)0b10 * 0x80 + 0B0011100));
   assertEqual(fpfP.BitsToShift, 8 + 2);
-  assertEqual(fpfN.BitsToShift, 8 + 2);
+  assertEqual(fpfN.BitsToShift, 8 + 2 - 1);
   assertEqual(fpfP.MaxInput, 57);
-  assertEqual(fpfN.MaxInput, 57);
+  assertEqual(fpfN.MaxInput, 57 * 2);
 
   Ratio8ToFixedPointFraction16(-5, -9, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
   assertEqual(fpfP.TheFraction, (int16_t)0b10 * 0x100 + 0B00111001);
-  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x100 + 0B00111000);
+  assertEqual(fpfN.TheFraction, (int16_t)0b10 * 0x80 + 0B0011100);
   assertEqual(fpfP.BitsToShift, 8 + 2);
-  assertEqual(fpfN.BitsToShift, 8 + 2);
+  assertEqual(fpfN.BitsToShift, 8 + 2 - 1);
   assertEqual(fpfP.MaxInput, 57);
-  assertEqual(fpfN.MaxInput, 57);
+  assertEqual(fpfN.MaxInput, 57 * 2);
 
   // inexact vulgar fraction
   Ratio8ToFixedPointFraction16(9, 5, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, (int16_t)0b11 * 0x100 + 0B10011010);
+  assertEqual(fpfP.TheFraction, (int16_t)0b11 * 0x80 + 0B1001101);
   assertEqual(fpfN.TheFraction, (int16_t)0b11 * 0x100 + 0B10011001);
-  assertEqual(fpfP.BitsToShift, 8 + 1);
+  assertEqual(fpfP.BitsToShift, 8 + 1 - 1);
   assertEqual(fpfN.BitsToShift, 8 + 1);
-  assertEqual(fpfP.MaxInput, 35);
+  assertEqual(fpfP.MaxInput, 35 * 2);
   assertEqual(fpfN.MaxInput, 35);
 
   Ratio8ToFixedPointFraction16(-9, 5, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, -((int16_t)0b11 * 0x100 + 0B10011010));
+  assertEqual(fpfP.TheFraction, -((int16_t)0b11 * 0x80 + 0B1001101));
   assertEqual(fpfN.TheFraction, -((int16_t)0b11 * 0x100 + 0B10011001));
-  assertEqual(fpfP.BitsToShift, 8 + 1);
+  assertEqual(fpfP.BitsToShift, 8 + 1 - 1);
   assertEqual(fpfN.BitsToShift, 8 + 1);
-  assertEqual(fpfP.MaxInput, 35);
+  assertEqual(fpfP.MaxInput, 35 * 2);
   assertEqual(fpfN.MaxInput, 35);
 
   Ratio8ToFixedPointFraction16(9, -5, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, -((int16_t)0b11 * 0x100 + 0B10011010));
+  assertEqual(fpfP.TheFraction, -((int16_t)0b11 * 0x80 + 0B1001101));
   assertEqual(fpfN.TheFraction, -((int16_t)0b11 * 0x100 + 0B10011001));
-  assertEqual(fpfP.BitsToShift, 8 + 1);
+  assertEqual(fpfP.BitsToShift, 8 + 1 - 1);
   assertEqual(fpfN.BitsToShift, 8 + 1);
-  assertEqual(fpfP.MaxInput, 35);
+  assertEqual(fpfP.MaxInput, 35 * 2);
   assertEqual(fpfN.MaxInput, 35);
 
   Ratio8ToFixedPointFraction16(-9, -5, &fpfP, &fpfN, pPrintDebug);
   if(pPrintDebug) { pPrintDebug->println(); }
-  assertEqual(fpfP.TheFraction, (int16_t)0b11 * 0x100 + 0B10011010);
+  assertEqual(fpfP.TheFraction, (int16_t)0b11 * 0x80 + 0B1001101);
   assertEqual(fpfN.TheFraction, (int16_t)0b11 * 0x100 + 0B10011001);
-  assertEqual(fpfP.BitsToShift, 8 + 1);
+  assertEqual(fpfP.BitsToShift, 8 + 1 - 1);
   assertEqual(fpfN.BitsToShift, 8 + 1);
-  assertEqual(fpfP.MaxInput, 35);
+  assertEqual(fpfP.MaxInput, 35 * 2);
   assertEqual(fpfN.MaxInput, 35);
 }
 

@@ -15,6 +15,10 @@ FastMapInt fastMapInt;
 FastMapLong fastMapLong;
 const int LogCalcInfo = 0;
 
+long FindBorderValueInThisBand(FastMapLong* pFML, long value){
+  return 0;
+}
+
 void setup()
 {
   delay(1000); // give clocks time to settle down
@@ -125,6 +129,11 @@ void setup()
   // check new FastMapInt function with odd 3:1 mapping
   Serial.println(F("  fastMapLong: i/3 ..."));
   fastMapLong.init(20, 320, 50, 150); // results in inexact 1/3 maths
+
+  Serial.print(F("  Dump ..."));
+  fastMapLong.Dump(&Serial); // dump internals
+  Serial.println(F("  ... Done"));
+  
   for (int i = -20; i < 400; ++i)
   {
     x = fastMapLong.map(i, &calcInfo);

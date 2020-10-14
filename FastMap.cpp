@@ -103,21 +103,21 @@ double FastMapDouble::upperConstrainedMap(double value)
 }
 
 void FixedPointFraction16_t::Dump(Print* pPrint){
-  pPrint->print(F("FixedPointFraction16_t Dump:<"));
+  pPrint->print(F("FPF16_t:<"));
   pPrint->print(F("F:"));pPrint->print(TheFraction, DEC);pPrint->print(F("=0x"));pPrint->print(TheFraction, HEX);
   pPrint->print(F(", B:"));pPrint->print(BitsToShift, DEC);
   pPrint->print(F(", Mx:"));pPrint->print(MaxInput, DEC);
   pPrint->print(F(">"));
 }
 void FixedPointFraction32_t::Dump(Print* pPrint){
-  pPrint->print(F("FixedPointFraction32_t Dump:<"));
+  pPrint->print(F("FPF32_t:<"));
   pPrint->print(F("F:"));pPrint->print(TheFraction, DEC);pPrint->print(F("=0x"));pPrint->print(TheFraction, HEX);
   pPrint->print(F(", B:"));pPrint->print(BitsToShift, DEC);
   pPrint->print(F(", Mx:"));pPrint->print(MaxInput, DEC);
   pPrint->print(F(">"));
 }
 void FixedPointFraction64_t::Dump(Print* pPrint){
-  pPrint->print(F("FixedPointFraction64_t Dump:<"));
+  pPrint->print(F("FPF64_t:<"));
   pPrint->print(F("F:=0x"));pPrint->print((int32_t)(TheFraction / 0x100000000), HEX);pPrint->print(F(" "));pPrint->print((int32_t)(TheFraction % 0x100000000), HEX);
   pPrint->print(F(", B:"));pPrint->print(BitsToShift, DEC);
   pPrint->print(F(", Mx:"));pPrint->print(MaxInput, DEC);
@@ -152,9 +152,9 @@ void FastMapInt::init(const int in_min_incl, const int in_max_excl, const int ou
   double theRatio = 1.0 + (1.0 * abs(_d_out) ) / abs(_d_in);
 
   // some of the following may overflow; no-one cares
-  Ratio8ToFixedPointFraction16(_d_out, _d_in, &_fixedPoint16Fraction_Pos, &_fixedPoint16Fraction_Neg, pPrintDebug);
-  Ratio16ToFixedPointFraction32(_d_out, _d_in, &_fixedPoint32Fraction_Pos, &_fixedPoint32Fraction_Neg, pPrintDebug);
-  Ratio32ToFixedPointFraction64(_d_out, _d_in, &_fixedPoint64Fraction_Pos, &_fixedPoint64Fraction_Neg, pPrintDebug);
+  Ratio8ToFixedPointFraction16(_d_out, _d_in, &_fixedPointFraction16_Pos, &_fixedPointFraction16_Neg, pPrintDebug);
+  Ratio16ToFixedPointFraction32(_d_out, _d_in, &_fixedPointFraction32_Pos, &_fixedPointFraction32_Neg, pPrintDebug);
+  Ratio32ToFixedPointFraction64(_d_out, _d_in, &_fixedPointFraction64_Pos, &_fixedPointFraction64_Neg, pPrintDebug);
 }
 
 int FastMapInt::constrainedMap(int value)
@@ -180,29 +180,29 @@ void FastMapInt::Dump(Print* pPrint)
 {
   pPrint->println(F("FastMapInt Dump:<"));
 
-  pPrint->print(F("_in_min_incl:"));pPrint->print(_in_min_incl);
-  pPrint->print(F(", _in_max_excl:"));pPrint->print(_in_max_excl);
-  pPrint->print(F(", _out_min_incl:"));pPrint->print(_out_min_incl);
-  pPrint->print(F(", _out_max_excl:"));pPrint->print(_out_max_excl);
+  pPrint->print(F("_in_mn_inc:"));pPrint->print(_in_min_incl);
+  pPrint->print(F(", _in_mx_exc:"));pPrint->print(_in_max_excl);
+  pPrint->print(F(", _out_mn_inc:"));pPrint->print(_out_min_incl);
+  pPrint->print(F(", _out_mx_exc:"));pPrint->print(_out_max_excl);
   pPrint->println();
 
   pPrint->print(F("_d_in:"));pPrint->print(_d_in);
   pPrint->print(F(", _d_out:"));pPrint->print(_d_out);
   pPrint->print(F(", _d_GCF:"));pPrint->print(_d_GCF);
-  pPrint->print(F(", _d_in_less1:"));pPrint->print(_d_in_less1);
-  pPrint->print(F(", _d_out_less1:"));pPrint->print(_d_out_less1);
+  pPrint->print(F(", _d_in_-1:"));pPrint->print(_d_in_less1);
+  pPrint->print(F(", _d_out_-1:"));pPrint->print(_d_out_less1);
   pPrint->println();
 
-  pPrint->print(F("[2]_fixedPoint16Fraction_Pos:"));_fixedPoint16Fraction_Pos.Dump(pPrint);
-  pPrint->print(F(", Neg:"));_fixedPoint16Fraction_Neg.Dump(pPrint);
+  pPrint->print(F("[2]_+:"));_fixedPointFraction16_Pos.Dump(pPrint);
+  pPrint->print(F(", -:"));_fixedPointFraction16_Neg.Dump(pPrint);
   pPrint->println();
 
-  pPrint->print(F("[4]_fixedPoint32Fraction_Pos:"));_fixedPoint32Fraction_Pos.Dump(pPrint);
-  pPrint->print(F(", Neg:"));_fixedPoint32Fraction_Neg.Dump(pPrint);
+  pPrint->print(F("[4]_+:"));_fixedPointFraction32_Pos.Dump(pPrint);
+  pPrint->print(F(", -:"));_fixedPointFraction32_Neg.Dump(pPrint);
   pPrint->println();
 
-  pPrint->print(F("[8]_fixedPoint64Fraction_Pos: 0x"));_fixedPoint64Fraction_Pos.Dump(pPrint);
-  pPrint->print(F(", Neg: 0x"));_fixedPoint64Fraction_Neg.Dump(pPrint);
+  pPrint->print(F("[8]_+:"));_fixedPointFraction64_Pos.Dump(pPrint);
+  pPrint->print(F(", -: 0x"));_fixedPointFraction64_Neg.Dump(pPrint);
   pPrint->println();
   pPrint->println(F(">"));
 }
@@ -235,9 +235,9 @@ void FastMapLong::init(const long in_min_incl, const long in_max_excl, const lon
   double theRatio = 1.0 + (1.0 * abs(_d_out) ) / abs(_d_in);
 
   // some of the following may overflow; no-one cares
-  Ratio8ToFixedPointFraction16(_d_out, _d_in, &_fixedPoint16Fraction_Pos, &_fixedPoint16Fraction_Neg, pPrintDebug);
-  Ratio16ToFixedPointFraction32(_d_out, _d_in, &_fixedPoint32Fraction_Pos, &_fixedPoint32Fraction_Neg, pPrintDebug);
-  Ratio32ToFixedPointFraction64(_d_out, _d_in, &_fixedPoint64Fraction_Pos, &_fixedPoint64Fraction_Neg, pPrintDebug);
+  Ratio8ToFixedPointFraction16(_d_out, _d_in, &_fixedPointFraction16_Pos, &_fixedPointFraction16_Neg, pPrintDebug);
+  Ratio16ToFixedPointFraction32(_d_out, _d_in, &_fixedPointFraction32_Pos, &_fixedPointFraction32_Neg, pPrintDebug);
+  Ratio32ToFixedPointFraction64(_d_out, _d_in, &_fixedPointFraction64_Pos, &_fixedPointFraction64_Neg, pPrintDebug);
 }
 
 long FastMapLong::constrainedMap(long value)
@@ -263,10 +263,10 @@ void FastMapLong::Dump(Print* pPrint)
 {
   pPrint->println(F("FastMapLong Dump:"));
 
-  pPrint->print(F("_in_min_incl:"));pPrint->print(_in_min_incl);
-  pPrint->print(F(", _in_max_excl:"));pPrint->print(_in_max_excl);
-  pPrint->print(F(", _out_min_incl:"));pPrint->print(_out_min_incl);
-  pPrint->print(F(", _out_max_excl:"));pPrint->print(_out_max_excl);
+  pPrint->print(F("_in_mn_inc:"));pPrint->print(_in_min_incl);
+  pPrint->print(F(", _in_mx_exc:"));pPrint->print(_in_max_excl);
+  pPrint->print(F(", _out_mn_inc:"));pPrint->print(_out_min_incl);
+  pPrint->print(F(", _out_mx_exc:"));pPrint->print(_out_max_excl);
   pPrint->println();
 
   pPrint->print(F("_d_in:"));pPrint->print(_d_in);
@@ -276,16 +276,16 @@ void FastMapLong::Dump(Print* pPrint)
   pPrint->print(F(", _d_out_less1:"));pPrint->print(_d_out_less1);
   pPrint->println();
 
-  pPrint->print(F("[2]_fixedPoint16Fraction_Pos:"));_fixedPoint16Fraction_Pos.Dump(pPrint);
-  pPrint->print(F(", Neg:"));_fixedPoint16Fraction_Neg.Dump(pPrint);
+  pPrint->print(F("[2]_+:"));_fixedPointFraction16_Pos.Dump(pPrint);
+  pPrint->print(F(", -:"));_fixedPointFraction16_Neg.Dump(pPrint);
   pPrint->println();
 
-  pPrint->print(F("[4]_fixedPoint32Fraction_Pos:"));_fixedPoint32Fraction_Pos.Dump(pPrint);
-  pPrint->print(F(", Neg:"));_fixedPoint32Fraction_Neg.Dump(pPrint);
+  pPrint->print(F("[4]_+:"));_fixedPointFraction32_Pos.Dump(pPrint);
+  pPrint->print(F(", -:"));_fixedPointFraction32_Neg.Dump(pPrint);
   pPrint->println();
 
-  pPrint->print(F("[8]_fixedPoint64Fraction_Pos: 0x"));_fixedPoint64Fraction_Pos.Dump(pPrint);
-  pPrint->print(F(", Neg: 0x"));_fixedPoint64Fraction_Neg.Dump(pPrint);
+  pPrint->print(F("[8]_+:"));_fixedPointFraction64_Pos.Dump(pPrint);
+  pPrint->print(F(", -:"));_fixedPointFraction64_Neg.Dump(pPrint);
   pPrint->println();
 }
 
@@ -397,6 +397,21 @@ void Ratio8ToFixedPointFraction16(int8_t numerator, int8_t denominator, FixedPoi
     resP.TheFraction /= denominator;
     resN.TheFraction /= denominator; // always need to round down for -ve numbers
   }
+
+  // If we have a binary '0' is LSD postion (and room to increase MaxInput), we can shift right which gives more head room
+  while((resP.MaxInput <= 0x3F) && (resP.TheFraction != 0x00) && ((resP.TheFraction & 0x01) == 0x00)){
+    resP.MaxInput <<= 1;
+    resP.TheFraction >>= 1;
+    --resP.BitsToShift;
+    if(pPrintDebug) { pPrintDebug->print(F(",S+R")); }
+  }
+  while((resN.MaxInput <= 0x3F) && (resN.TheFraction != 0x00) && ((resN.TheFraction & 0x01) == 0x00)){
+    resN.MaxInput <<= 1;
+    resN.TheFraction >>= 1;
+    --resN.BitsToShift;
+    if(pPrintDebug) { pPrintDebug->print(F(",S-R")); }
+  }
+
   if(pPrintDebug) { pPrintDebug->print(F(",+="));resP.Dump(pPrintDebug);pPrintDebug->print(F(",-="));resN.Dump(pPrintDebug); }
 
   if(poutFixedPointFraction_Pos) { *poutFixedPointFraction_Pos = resP; }
@@ -445,6 +460,21 @@ void Ratio16ToFixedPointFraction32(int16_t numerator, int16_t denominator, Fixed
     resP.TheFraction /= denominator;
     resN.TheFraction /= denominator; // always need to round down for -ve numbers
   }
+
+  // If we have a binary '0' is LSD postion (and room to increase MaxInput), we can shift right which gives more head room
+  while((resP.MaxInput <= 0x3FFF) && (resP.TheFraction != 0x00) && ((resP.TheFraction & 0x01) == 0x00)){
+    resP.MaxInput <<= 1;
+    resP.TheFraction >>= 1;
+    --resP.BitsToShift;
+    if(pPrintDebug) { pPrintDebug->print(F(",S+R")); }
+  }
+  while((resN.MaxInput <= 0x3FFF) && (resN.TheFraction != 0x00) && ((resN.TheFraction & 0x01) == 0x00)){
+    resN.MaxInput <<= 1;
+    resN.TheFraction >>= 1;
+    --resN.BitsToShift;
+    if(pPrintDebug) { pPrintDebug->print(F(",S-R")); }
+  }
+
   if(pPrintDebug) { pPrintDebug->print(F(",+="));resP.Dump(pPrintDebug);pPrintDebug->print(F(",-="));resN.Dump(pPrintDebug); }
 
   if(poutFixedPointFraction_Pos) { *poutFixedPointFraction_Pos = resP; }
@@ -493,6 +523,21 @@ void Ratio32ToFixedPointFraction64(int32_t numerator, int32_t denominator, Fixed
     resP.TheFraction /= denominator;
     resN.TheFraction /= denominator; // always need to round down for -ve numbers
   }
+
+  // If we have a binary '0' is LSD postion (and room to increase MaxInput), we can shift right which gives more head room
+  while((resP.MaxInput <= 0x3FFFFFFF) && (resP.TheFraction != 0x00) && ((resP.TheFraction & 0x01) == 0x00)){
+    resP.MaxInput <<= 1;
+    resP.TheFraction >>= 1;
+    --resP.BitsToShift;
+    if(pPrintDebug) { pPrintDebug->print(F(",S+R")); }
+  }
+  while((resN.MaxInput <= 0x3FFFFFFF) && (resN.TheFraction != 0x00) && ((resN.TheFraction & 0x01) == 0x00)){
+    resN.MaxInput <<= 1;
+    resN.TheFraction >>= 1;
+    --resN.BitsToShift;
+    if(pPrintDebug) { pPrintDebug->print(F(",S-R")); }
+  }
+
   if(pPrintDebug) { pPrintDebug->print(F(",+="));resP.Dump(pPrintDebug);pPrintDebug->print(F(",-="));resN.Dump(pPrintDebug); }
 
   if(poutFixedPointFraction_Pos) { *poutFixedPointFraction_Pos = resP; }
@@ -542,6 +587,21 @@ void Ratio64ToFixedPointFraction64(int64_t numerator, int64_t denominator, Fixed
     resP.TheFraction /= denominator;
     resN.TheFraction /= denominator; // always need to round down for -ve numbers
   }
+
+  // If we have a binary '0' is LSD postion (and room to increase MaxInput), we can shift right which gives more head room
+  while((resP.MaxInput <= 0x3FFFFFFF) && (resP.TheFraction != 0x00) && ((resP.TheFraction & 0x01) == 0x00)){
+    resP.MaxInput <<= 1;
+    resP.TheFraction >>= 1;
+    --resP.BitsToShift;
+    if(pPrintDebug) { pPrintDebug->print(F(",S+R")); }
+  }
+  while((resN.MaxInput <= 0x3FFFFFFF) && (resN.TheFraction != 0x00) && ((resN.TheFraction & 0x01) == 0x00)){
+    resN.MaxInput <<= 1;
+    resN.TheFraction >>= 1;
+    --resN.BitsToShift;
+    if(pPrintDebug) { pPrintDebug->print(F(",S-R")); }
+  }
+
   if(pPrintDebug) { pPrintDebug->print(F(",+="));resP.Dump(pPrintDebug);pPrintDebug->print(F(",-="));resN.Dump(pPrintDebug); }
 
   if(poutFixedPointFraction_Pos) { *poutFixedPointFraction_Pos = resP; }

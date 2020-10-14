@@ -108,30 +108,30 @@ public:
         calcInfo |= 1;
         ratioPart = 0;
       } else if(inXS > 0) {
-        if(inXS <= _fixedPoint16Fraction_Pos.MaxInput) {
+        if(inXS <= _fixedPointFraction16_Pos.MaxInput) {
           calcInfo |= 2;
-          ratioPart = Multiply8ByFixedPointFraction16(inXS, &_fixedPoint16Fraction_Pos);
-        } else if(inXS <=_fixedPoint32Fraction_Pos.MaxInput) {
+          ratioPart = Multiply8ByFixedPointFraction16(inXS, &_fixedPointFraction16_Pos);
+        } else if(inXS <=_fixedPointFraction32_Pos.MaxInput) {
           calcInfo |= 4;
-          ratioPart = Multiply16ByFixedPointFraction32(inXS, &_fixedPoint32Fraction_Pos);
-        } else if(inXS < _fixedPoint64Fraction_Pos.MaxInput) {
+          ratioPart = Multiply16ByFixedPointFraction32(inXS, &_fixedPointFraction32_Pos);
+        } else if(inXS < _fixedPointFraction64_Pos.MaxInput) {
           calcInfo |= 8;
-          ratioPart = Multiply32ByFixedPointFraction64(inXS, &_fixedPoint64Fraction_Pos);
+          ratioPart = Multiply32ByFixedPointFraction64(inXS, &_fixedPointFraction64_Pos);
         } else {
           calcInfo |= 32;
           ratioPart = ((long)inXS * _d_out - (inXS >= 0 ? 0 : _d_in_less1)) / _d_in;
         }
       } else { // i.e. -ve
         int absXS = -inXS;
-        if(absXS <= _fixedPoint16Fraction_Neg.MaxInput){
+        if(absXS <= _fixedPointFraction16_Neg.MaxInput){
           calcInfo |= 2;
-          ratioPart = Multiply8ByFixedPointFraction16(inXS, &_fixedPoint16Fraction_Neg);
-        } else if(absXS <= _fixedPoint32Fraction_Neg.MaxInput){
+          ratioPart = Multiply8ByFixedPointFraction16(inXS, &_fixedPointFraction16_Neg);
+        } else if(absXS <= _fixedPointFraction32_Neg.MaxInput){
           calcInfo |= 4;
-          ratioPart = Multiply16ByFixedPointFraction32(inXS, &_fixedPoint32Fraction_Neg);
-        } else if(absXS <= _fixedPoint64Fraction_Neg.MaxInput){
+          ratioPart = Multiply16ByFixedPointFraction32(inXS, &_fixedPointFraction32_Neg);
+        } else if(absXS <= _fixedPointFraction64_Neg.MaxInput){
           calcInfo |= 8;
-          ratioPart = Multiply32ByFixedPointFraction64(inXS, &_fixedPoint64Fraction_Neg);
+          ratioPart = Multiply32ByFixedPointFraction64(inXS, &_fixedPointFraction64_Neg);
         } else {
           calcInfo |= 32;
           ratioPart = ((long)inXS * _d_out - (inXS >= 0 ? 0 : _d_in_less1)) / _d_in;
@@ -159,9 +159,9 @@ private:
     int _in_min_incl, _in_max_excl, _out_min_incl, _out_max_excl;
     int _d_in, _d_out, _d_GCF;
     int _d_in_less1, _d_out_less1;
-    FixedPointFraction16_t _fixedPoint16Fraction_Pos, _fixedPoint16Fraction_Neg;
-    FixedPointFraction32_t _fixedPoint32Fraction_Pos, _fixedPoint32Fraction_Neg;
-    FixedPointFraction64_t _fixedPoint64Fraction_Pos, _fixedPoint64Fraction_Neg;
+    FixedPointFraction16_t _fixedPointFraction16_Pos, _fixedPointFraction16_Neg;
+    FixedPointFraction32_t _fixedPointFraction32_Pos, _fixedPointFraction32_Neg;
+    FixedPointFraction64_t _fixedPointFraction64_Pos, _fixedPointFraction64_Neg;
 };
 
 class FastMapLong
@@ -179,30 +179,30 @@ public:
         calcInfo |= 1;
         ratioPart = 0;
       } else if(inXS > 0) {
-        if(inXS <= _fixedPoint16Fraction_Pos.MaxInput) {
+        if(inXS <= _fixedPointFraction16_Pos.MaxInput) {
           calcInfo |= 2;
-          ratioPart = Multiply8ByFixedPointFraction16(inXS, &_fixedPoint16Fraction_Pos);
-        } else if(inXS <=_fixedPoint32Fraction_Pos.MaxInput) {
+          ratioPart = Multiply8ByFixedPointFraction16(inXS, &_fixedPointFraction16_Pos);
+        } else if(inXS <=_fixedPointFraction32_Pos.MaxInput) {
           calcInfo |= 4;
-          ratioPart = Multiply16ByFixedPointFraction32(inXS, &_fixedPoint32Fraction_Pos);
-        } else if(inXS < _fixedPoint64Fraction_Pos.MaxInput) {
+          ratioPart = Multiply16ByFixedPointFraction32(inXS, &_fixedPointFraction32_Pos);
+        } else if(inXS < _fixedPointFraction64_Pos.MaxInput) {
           calcInfo |= 8;
-          ratioPart = Multiply32ByFixedPointFraction64(inXS, &_fixedPoint64Fraction_Pos);
+          ratioPart = Multiply32ByFixedPointFraction64(inXS, &_fixedPointFraction64_Pos);
         } else {
           calcInfo |= 32;
           ratioPart = ((long long)inXS * _d_out - (inXS >= 0 ? 0 : _d_in_less1)) / _d_in;
         }
       } else { // i.e. -ve
         int absXS = -inXS;
-        if(absXS <= _fixedPoint16Fraction_Neg.MaxInput){
+        if(absXS <= _fixedPointFraction16_Neg.MaxInput){
           calcInfo |= 2;
-          ratioPart = Multiply8ByFixedPointFraction16(inXS, &_fixedPoint16Fraction_Neg);
-        } else if(absXS <= _fixedPoint32Fraction_Neg.MaxInput){
+          ratioPart = Multiply8ByFixedPointFraction16(inXS, &_fixedPointFraction16_Neg);
+        } else if(absXS <= _fixedPointFraction32_Neg.MaxInput){
           calcInfo |= 4;
-          ratioPart = Multiply16ByFixedPointFraction32(inXS, &_fixedPoint32Fraction_Neg);
-        } else if(absXS <= _fixedPoint64Fraction_Neg.MaxInput){
+          ratioPart = Multiply16ByFixedPointFraction32(inXS, &_fixedPointFraction32_Neg);
+        } else if(absXS <= _fixedPointFraction64_Neg.MaxInput){
           calcInfo |= 8;
-          ratioPart = Multiply32ByFixedPointFraction64(inXS, &_fixedPoint64Fraction_Neg);
+          ratioPart = Multiply32ByFixedPointFraction64(inXS, &_fixedPointFraction64_Neg);
         } else {
           calcInfo |= 32;
           ratioPart = ((long long)inXS * _d_out - (inXS >= 0 ? 0 : _d_in_less1)) / _d_in;
@@ -230,8 +230,8 @@ private:
     long _in_min_incl, _in_max_excl, _out_min_incl, _out_max_excl;
     long _d_in, _d_out, _d_GCF;
     long _d_in_less1, _d_out_less1;
-    FixedPointFraction16_t _fixedPoint16Fraction_Pos, _fixedPoint16Fraction_Neg;
-    FixedPointFraction32_t _fixedPoint32Fraction_Pos, _fixedPoint32Fraction_Neg;
-    FixedPointFraction64_t _fixedPoint64Fraction_Pos, _fixedPoint64Fraction_Neg;
+    FixedPointFraction16_t _fixedPointFraction16_Pos, _fixedPointFraction16_Neg;
+    FixedPointFraction32_t _fixedPointFraction32_Pos, _fixedPointFraction32_Neg;
+    FixedPointFraction64_t _fixedPointFraction64_Pos, _fixedPointFraction64_Neg;
 };
 // -- END OF FILE --
