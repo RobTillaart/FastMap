@@ -123,6 +123,23 @@ unittest(test_upperConstrainedMap)
 }
 
 
+unittest(test_map_double)
+{
+  FastMapDouble fm;
+
+  fprintf(stderr, "FAST MAP DOUBLE\n");
+  fprintf(stderr, "VERSION:\t%s\n", FASTMAP_LIB_VERSION);
+  fm.init(-2, 12, 17, 42);
+
+  assertEqualFloat(11.6429, fm.map(-5), 0.001);
+  assertEqualFloat(17, fm.map(-2), 0.001);
+  assertEqualFloat(20.5714, fm.map(0), 0.001);
+  assertEqualFloat(26.1814, fm.map(PI), 0.001);
+  assertEqualFloat(42, fm.map(12), 0.001);
+  assertEqualFloat(47.3571, fm.map(15), 0.001);
+}
+
+
 unittest_main()
 
 // --------
