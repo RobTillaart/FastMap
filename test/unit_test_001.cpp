@@ -3,7 +3,7 @@
 //  AUTHOR: Rob Tillaart
 //    DATE: 2020-12-21
 // PURPOSE: unit tests for the FastMap
-//          https://github.com/RobTillaart/
+//          https://github.com/RobTillaart/FastMap
 //          https://github.com/Arduino-CI/arduino_ci/blob/master/REFERENCE.md
 //
 
@@ -32,46 +32,40 @@
 #include "FastMap.h"
 
 
-
 unittest_setup()
 {
 }
+
 
 unittest_teardown()
 {
 }
 
-/*
-unittest(test_new_operator)
-{
-  assertEqualINF(exp(800));
-  assertEqualINF(0.0/0.0);
-  assertEqualINF(42);
-  
-  assertEqualNAN(INFINITY - INFINITY);
-  assertEqualNAN(0.0/0.0);
-  assertEqualNAN(42);
-}
-*/
 
-
-unittest(test_all)
+unittest(test_map)
 {
   FastMap fm;
 
-  fprintf(stderr, "VERSION:\t%s", FASTMAP_LIB_VERSION);
+  fprintf(stderr, "VERSION:\t%s\n", FASTMAP_LIB_VERSION);
   fm.init(-2, 12, 17, 42);
 
-  fprintf(stderr, "map()");
-  assertEqualFloat(17, fm.map(-5), 0.001);
+  assertEqualFloat(0, fm.map(-5), 0.001);
   assertEqualFloat(17, fm.map(-2), 0.001);
-  assertEqualFloat(20, fm.map(0), 0.001);
-  assertEqualFloat(22, fm.map(PI), 0.001);
+  assertEqualFloat(0, fm.map(0), 0.001);
+  assertEqualFloat(0, fm.map(PI), 0.001);
   assertEqualFloat(42, fm.map(12), 0.001);
-  assertEqualFloat(42, fm.map(15), 0.001);
-  assertEqualFloat(42, fm.map(15), 0.001);
+  assertEqualFloat(0, fm.map(15), 0.001);
+  assertEqualFloat(0, fm.map(15), 0.001);
+}
 
-  fprintf(stderr, "back()");
+
+unittest(test_back)
+{
+  FastMap fm;
+
+  fprintf(stderr, "VERSION:\t%s\n", FASTMAP_LIB_VERSION);
+  fm.init(-2, 12, 17, 42);
+
   assertEqualFloat(00, fm.back(-5), 0.001);
   assertEqualFloat(00, fm.back(0), 0.001);
   assertEqualFloat(00, fm.back(10), 0.001);
@@ -79,8 +73,16 @@ unittest(test_all)
   assertEqualFloat(00, fm.back(25), 0.001);
   assertEqualFloat(12, fm.back(42), 0.001);
   assertEqualFloat(00, fm.back(65), 0.001);
+}
 
-  fprintf(stderr, "constrainedMap()");
+
+unittest(test_constrainedMap)
+{
+  FastMap fm;
+
+  fprintf(stderr, "VERSION:\t%s\n", FASTMAP_LIB_VERSION);
+  fm.init(-2, 12, 17, 42);
+
   assertEqualFloat(17, fm.constrainedMap(-5), 0.001);
   assertEqualFloat(17, fm.constrainedMap(-2), 0.001);
   assertEqualFloat(20, fm.constrainedMap(0), 0.001);
@@ -88,8 +90,16 @@ unittest(test_all)
   assertEqualFloat(42, fm.constrainedMap(12), 0.001);
   assertEqualFloat(42, fm.constrainedMap(15), 0.001);
   assertEqualFloat(42, fm.constrainedMap(15), 0.001);
+}
 
-  fprintf(stderr, "lowerConstrainedMap()");
+
+unittest(test_lowerConstrainedMap)
+{
+  FastMap fm;
+
+  fprintf(stderr, "VERSION:\t%s\n", FASTMAP_LIB_VERSION);
+  fm.init(-2, 12, 17, 42);
+
   assertEqualFloat(17, fm.lowerConstrainedMap(-5), 0.001);
   assertEqualFloat(17, fm.lowerConstrainedMap(-2), 0.001);
   assertEqualFloat(20, fm.lowerConstrainedMap(0), 0.001);
@@ -97,8 +107,16 @@ unittest(test_all)
   assertEqualFloat(42, fm.lowerConstrainedMap(12), 0.001);
   assertEqualFloat(42, fm.lowerConstrainedMap(15), 0.001);
   assertEqualFloat(42, fm.lowerConstrainedMap(15), 0.001);
+}
 
-  fprintf(stderr, "upperConstrainedMap()");
+
+unittest(test_upperConstrainedMap)
+{
+  FastMap fm;
+
+  fprintf(stderr, "VERSION:\t%s\n", FASTMAP_LIB_VERSION);
+  fm.init(-2, 12, 17, 42);
+
   assertEqualFloat(17, fm.upperConstrainedMap(-5), 0.001);
   assertEqualFloat(17, fm.upperConstrainedMap(-2), 0.001);
   assertEqualFloat(20, fm.upperConstrainedMap(0), 0.001);
@@ -107,6 +125,7 @@ unittest(test_all)
   assertEqualFloat(42, fm.upperConstrainedMap(15), 0.001);
   assertEqualFloat(42, fm.upperConstrainedMap(15), 0.001);
 }
+
 
 unittest_main()
 
