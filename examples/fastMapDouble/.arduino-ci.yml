@@ -3,8 +3,8 @@ compile:
   platforms:
     - uno
     - leonardo
-    - due
-    - zero
+#    - due
+#    - zero
 
   libraries:
     - "printHelpers"
