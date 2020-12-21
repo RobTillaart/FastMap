@@ -65,9 +65,9 @@ unittest(test_back)
   fprintf(stderr, "VERSION:\t%s\n", FASTMAP_LIB_VERSION);
   fm.init(-2, 12, 17, 42);
 
-  assertEqualFloat(14.32, fm.back(-5), 0.001);
-  assertEqualFloat(11.52, fm.back(0), 0.001);
-  assertEqualFloat(5.92, fm.back(10), 0.001);
+  assertEqualFloat(-14.32, fm.back(-5), 0.001);
+  assertEqualFloat(-11.52, fm.back(0), 0.001);
+  assertEqualFloat(-5.92, fm.back(10), 0.001);
   assertEqualFloat(-2, fm.back(17), 0.001);
   assertEqualFloat(2.48, fm.back(25), 0.001);
   assertEqualFloat(12, fm.back(42), 0.001);
@@ -84,8 +84,8 @@ unittest(test_constrainedMap)
 
   assertEqualFloat(17, fm.constrainedMap(-5), 0.001);
   assertEqualFloat(17, fm.constrainedMap(-2), 0.001);
-  assertEqualFloat(0, fm.constrainedMap(0), 0.001);
-  assertEqualFloat(0, fm.constrainedMap(PI), 0.001);
+  assertEqualFloat(20.5714, fm.constrainedMap(0), 0.001);
+  assertEqualFloat(26.1814, fm.constrainedMap(PI), 0.001);
   assertEqualFloat(42, fm.constrainedMap(12), 0.001);
   assertEqualFloat(42, fm.constrainedMap(15), 0.001);
 }
@@ -100,10 +100,10 @@ unittest(test_lowerConstrainedMap)
 
   assertEqualFloat(17, fm.lowerConstrainedMap(-5), 0.001);
   assertEqualFloat(17, fm.lowerConstrainedMap(-2), 0.001);
-  assertEqualFloat(0, fm.lowerConstrainedMap(0), 0.001);
-  assertEqualFloat(0, fm.lowerConstrainedMap(PI), 0.001);
+  assertEqualFloat(20.5714, fm.lowerConstrainedMap(0), 0.001);
+  assertEqualFloat(26.1814, fm.lowerConstrainedMap(PI), 0.001);
   assertEqualFloat(42, fm.lowerConstrainedMap(12), 0.001);
-  assertEqualFloat(42, fm.lowerConstrainedMap(15), 0.001);
+  assertEqualFloat(47.3571, fm.lowerConstrainedMap(15), 0.001);
 }
 
 
@@ -114,10 +114,10 @@ unittest(test_upperConstrainedMap)
   fprintf(stderr, "VERSION:\t%s\n", FASTMAP_LIB_VERSION);
   fm.init(-2, 12, 17, 42);
 
-  assertEqualFloat(0, fm.upperConstrainedMap(-5), 0.001);
+  assertEqualFloat(11.6429, fm.upperConstrainedMap(-5), 0.001);
   assertEqualFloat(17, fm.upperConstrainedMap(-2), 0.001);
-  assertEqualFloat(0, fm.upperConstrainedMap(0), 0.001);
-  assertEqualFloat(0, fm.upperConstrainedMap(PI), 0.001);
+  assertEqualFloat(20.5714, fm.upperConstrainedMap(0), 0.001);
+  assertEqualFloat(26.1814, fm.upperConstrainedMap(PI), 0.001);
   assertEqualFloat(42, fm.upperConstrainedMap(12), 0.001);
   assertEqualFloat(42, fm.upperConstrainedMap(15), 0.001);
 }
