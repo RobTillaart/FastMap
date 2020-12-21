@@ -2,9 +2,9 @@ compile:
   # Choosing to run compilation tests on 2 different Arduino platforms
   platforms:
     - uno
-#    - leonardo
-#    - due
-#    - zero
+    - leonardo
+    - due
+    - zero
 
   libraries:
     - "printHelpers"
