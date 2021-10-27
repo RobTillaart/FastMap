@@ -10,9 +10,11 @@
 // see FastMap.cpp file
 //
 
+
 #include "Arduino.h"
 
 #define FASTMAP_LIB_VERSION (F("0.3.2"))
+
 
 class FastMap
 {
