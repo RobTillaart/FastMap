@@ -1,8 +1,10 @@
 # Syntax Colouring Map For FastMap
 
+
 # Data types (KEYWORD1)
 FastMap	KEYWORD1
 FastMapDouble	KEYWORD1
+
 
 # Methods and Functions (KEYWORD2)
 init	KEYWORD2
