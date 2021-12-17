@@ -1,11 +1,12 @@
 //
 //    FILE: FastMap.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.3.2
+// VERSION: 0.3.3
 // PURPOSE: class with fast map function - library for Arduino
 //     URL: https://github.com/RobTillaart/FastMap
 //
 // HISTORY:
+//  0.3.3  2021-12-17  update library.json, license, minor edits
 //  0.3.2  2020-12-21  add Arduino-CI + unit test
 //  0.3.1  2020-08-31  updated documentation
 //  0.3.0  2020-07-04  added fastMapDouble + test sketch.
@@ -22,7 +23,6 @@
 //  0.1.02  squeezed the code (first public version)
 //  0.1.01  refactor
 //  0.1.00  initial version
-//
 
 
 #include "FastMap.h"
@@ -114,4 +114,5 @@ double FastMapDouble::upperConstrainedMap(double value)
 }
 
 
-// END OF FILE
+// -- END OF FILE --
+
