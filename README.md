@@ -94,13 +94,21 @@ Note that on most embedded platforms the performance of doubles is less than flo
 |  MKR1000       |  yes    |  yes     |
 |  Zero          |  yes    |  yes     |
 |  Teensy        |  yes    |  ?       |
+|  ESP32         |  yes    |  yes     |
+|  RP2040        |  yes    |  ?       |
 
 to elaborate table.  (if someone has a good link, please let me know).
 
-test code
+test code.
 ```cpp
-Serial.println(sizeof(float));
-Serial.println(sizeof(double));
+void setup() {
+  Serial.begin(115200);
+  Serial.print("size of double:\t");
+  Serial.println(sizeof(double));
+  Serial.print("size of float: \t");
+  Serial.println(sizeof(float));
+}
+void loop() {}
 ```
 
 

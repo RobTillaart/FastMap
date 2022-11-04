@@ -37,7 +37,7 @@ class FastMapDouble
 {
 public:
   FastMapDouble();
-  void init(double in_min, double in_max, double out_min, double out_max);
+  bool init(double in_min, double in_max, double out_min, double out_max);
 
   double inline map (const double value)  { return _base + value * _factor; }
   double inline back (const double value) { return _backbase + value * _backfactor; }

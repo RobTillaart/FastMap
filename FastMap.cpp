@@ -73,7 +73,7 @@ FastMapDouble::FastMapDouble()
 }
 
 
-void FastMapDouble::init(double in_min, double in_max, double out_min, double out_max)
+bool FastMapDouble::init(double in_min, double in_max, double out_min, double out_max)
 {
   double _inRange = in_max - in_min;
   double _outRange = out_max - out_min;
